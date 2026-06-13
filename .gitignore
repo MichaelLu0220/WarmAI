@@ -28,3 +28,15 @@ coverage/
 .vscode/
 .DS_Store
 Thumbs.db
+
+# WarmAI runtime
+data/
+reports/latest.json
+reports/history/*.json
+reports/summary.md
+!reports/history/.gitkeep
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
