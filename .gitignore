@@ -3,6 +3,11 @@
 .env.*
 !.env.example
 
+# Local project context and internal planning
+START_HERE.md
+docs/requirements/
+docs/superpowers/
+
 # Python
 __pycache__/
 *.py[cod]
