@@ -12,6 +12,7 @@
 
 
 - After every implementation-plan task, create a Markdown completion report under `docs/task-reports/` containing scope, TDD evidence, verification results, changed files, and commit information.
+- Work directly on `main`; do not create per-task branches or worktrees.
 
 ## Tooling
 
