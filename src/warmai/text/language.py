@@ -20,7 +20,7 @@ def _is_han(char: str) -> bool:
 
 
 def _is_latin(char: str) -> bool:
-    return "LATIN" in unicodedata.name(char, "")
+    return char.isalpha() and "LATIN" in unicodedata.name(char, "")
 
 
 def _is_unsupported_letter(char: str) -> bool:

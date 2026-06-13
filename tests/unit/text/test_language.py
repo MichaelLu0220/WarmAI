@@ -20,7 +20,15 @@ def test_classifies_supported_text(text: str, language: str, primary: str) -> No
 
 @pytest.mark.parametrize(
     "text",
-    ["?????", "👍👍👍", "123456", "これはテストです", "\ufffd\ufffd\ufffd"],
+    [
+        "?????",
+        "👍👍👍",
+        "123456",
+        "これはテストです",
+        "\ufffd\ufffd\ufffd",
+        "\u271d",
+        "\u0363",
+    ],
 )
 def test_rejects_unanalyzable_input(text: str) -> None:
     with pytest.raises(LanguageClassificationError):
