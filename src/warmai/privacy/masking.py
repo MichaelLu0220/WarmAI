@@ -8,6 +8,8 @@ def mask_text(text: str, spans: list[PiiSpan]) -> str:
     ordered_spans = sorted(spans, key=lambda item: (item.start, item.end))
     replacements: list[tuple[PiiSpan, str]] = []
     for index, span in enumerate(ordered_spans):
+        if not 0 <= span.start < span.end <= len(text):
+            raise ValueError("PII spans must be within text bounds")
         if index > 0 and span.start < ordered_spans[index - 1].end:
             raise ValueError("PII spans must not overlap")
         counters[span.kind] += 1
