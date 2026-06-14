@@ -90,7 +90,7 @@ class CircuitBreaker:
     def allow_request(self) -> AdmissionPermit:
         if self._state is CircuitState.CLOSED:
             return AdmissionPermit(True, self._breaker_identity, None, _PERMIT_CREATION_KEY)
-        now = self._clock()
+        now = self._read_clock()
         if self._state is CircuitState.OPEN:
             if now - self._opened_at < self._recovery_seconds:
                 return _DENIED
@@ -107,9 +107,9 @@ class CircuitBreaker:
         if self._state is CircuitState.OPEN:
             raise RuntimeError("cannot record an outcome while circuit is open")
         if self._state is CircuitState.HALF_OPEN:
-            self._require_active_half_open_permit(permit, self._clock())
+            self._require_active_half_open_permit(permit, self._read_clock())
         elif permit is not None:
-            self._reject_inactive_permit(permit)
+            self._validate_closed_permit(permit)
         self._state = CircuitState.CLOSED
         self._failures = 0
         self._clear_half_open_probe()
@@ -118,20 +118,24 @@ class CircuitBreaker:
         if self._state is CircuitState.OPEN:
             raise RuntimeError("cannot record an outcome while circuit is open")
         if self._state is CircuitState.HALF_OPEN:
-            now = self._clock()
+            now = self._read_clock()
             self._require_active_half_open_permit(permit, now)
             self._state = CircuitState.OPEN
             self._opened_at = now
             self._clear_half_open_probe()
             return
         if permit is not None:
-            self._reject_inactive_permit(permit)
+            self._validate_closed_permit(permit)
 
-        self._failures += 1
-        if self._failures >= self._failure_threshold:
+        next_failures = self._failures + 1
+        if next_failures >= self._failure_threshold:
+            now = self._read_clock()
+            self._failures = next_failures
             self._state = CircuitState.OPEN
-            self._opened_at = self._clock()
+            self._opened_at = now
             self._clear_half_open_probe()
+            return
+        self._failures = next_failures
 
     def _admit_half_open_probe(self, now: float) -> AdmissionPermit:
         self._next_probe_generation += 1
@@ -165,9 +169,16 @@ class CircuitBreaker:
         if permit._probe_generation != self._active_probe_generation:
             raise RuntimeError("permit does not match active half-open probe")
 
-    def _reject_inactive_permit(self, permit: AdmissionPermit) -> None:
+    def _validate_closed_permit(self, permit: AdmissionPermit) -> None:
         if not isinstance(permit, AdmissionPermit) or not permit:
-            raise RuntimeError("valid half-open permit is required")
+            raise RuntimeError("admitted permit is required")
         if permit._breaker_identity is not self._breaker_identity:
             raise RuntimeError("permit belongs to a different circuit breaker")
-        raise RuntimeError("half-open permit is no longer active")
+        if permit._probe_generation is not None:
+            raise RuntimeError("half-open permit is no longer active")
+
+    def _read_clock(self) -> float:
+        value = self._clock()
+        if not math.isfinite(value):
+            raise ValueError("clock reading must be finite")
+        return value

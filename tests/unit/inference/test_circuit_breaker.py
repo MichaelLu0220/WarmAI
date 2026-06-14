@@ -115,6 +115,57 @@ def test_success_in_closed_state_resets_consecutive_failures() -> None:
     assert_breaker_state(breaker, CircuitState.CLOSED)
 
 
+def test_closed_success_accepts_matching_admission_permit_and_resets_failures() -> None:
+    breaker = CircuitBreaker(3, 30.0, clock=lambda: 100.0)
+    breaker.record_failure(breaker.allow_request())
+    breaker.record_failure(breaker.allow_request())
+
+    permit = breaker.allow_request()
+    breaker.record_success(permit)
+
+    breaker.record_failure(breaker.allow_request())
+    breaker.record_failure(breaker.allow_request())
+    assert_breaker_state(breaker, CircuitState.CLOSED)
+    breaker.record_failure(breaker.allow_request())
+    assert_breaker_state(breaker, CircuitState.OPEN)
+
+
+def test_closed_failure_accepts_matching_admission_permit_and_opens_at_threshold() -> None:
+    breaker = CircuitBreaker(2, 30.0, clock=lambda: 100.0)
+
+    breaker.record_failure(breaker.allow_request())
+
+    assert_breaker_state(breaker, CircuitState.CLOSED)
+    breaker.record_failure(breaker.allow_request())
+    assert_breaker_state(breaker, CircuitState.OPEN)
+
+
+@pytest.mark.parametrize("outcome", ["record_success", "record_failure"])
+def test_closed_outcome_rejects_permit_from_another_breaker(outcome: str) -> None:
+    first = CircuitBreaker(3, 30.0)
+    second = CircuitBreaker(3, 30.0)
+    foreign_permit = first.allow_request()
+
+    with pytest.raises(RuntimeError, match="permit belongs to a different circuit breaker"):
+        getattr(second, outcome)(foreign_permit)
+
+    assert_breaker_state(second, CircuitState.CLOSED)
+
+
+@pytest.mark.parametrize("outcome", ["record_success", "record_failure"])
+def test_closed_outcome_rejects_denied_permit(outcome: str) -> None:
+    source = CircuitBreaker(1, 30.0, clock=lambda: 100.0)
+    source.record_failure()
+    denied = source.allow_request()
+    target = CircuitBreaker(3, 30.0)
+
+    assert not denied
+    with pytest.raises(RuntimeError, match="admitted permit is required"):
+        getattr(target, outcome)(denied)
+
+    assert_breaker_state(target, CircuitState.CLOSED)
+
+
 def test_failed_half_open_probe_reopens_and_restarts_recovery() -> None:
     now = [100.0]
     breaker = CircuitBreaker(1, 30.0, clock=lambda: now[0])
@@ -274,6 +325,93 @@ def test_admission_permits_are_immutable_and_not_directly_constructible() -> Non
         permit._admitted = False  # type: ignore[misc]
     with pytest.raises(TypeError, match="AdmissionPermit cannot be constructed directly"):
         AdmissionPermit(True, object(), 1)
+
+
+@pytest.mark.parametrize("clock_value", [float("nan"), float("inf"), float("-inf")])
+def test_open_admission_rejects_non_finite_clock_without_mutating_state(
+    clock_value: float,
+) -> None:
+    now = [100.0]
+    breaker = CircuitBreaker(1, 30.0, clock=lambda: now[0])
+    breaker.record_failure()
+    now[0] = clock_value
+
+    with pytest.raises(ValueError, match="clock reading must be finite"):
+        breaker.allow_request()
+
+    assert_breaker_state(breaker, CircuitState.OPEN)
+    now[0] = 130.0
+    assert breaker.allow_request()
+    assert_breaker_state(breaker, CircuitState.HALF_OPEN)
+
+
+@pytest.mark.parametrize("clock_value", [float("nan"), float("inf"), float("-inf")])
+def test_half_open_lease_rejects_non_finite_clock_without_replacing_probe(
+    clock_value: float,
+) -> None:
+    now = [100.0]
+    breaker = CircuitBreaker(1, 30.0, clock=lambda: now[0])
+    breaker.record_failure()
+    now[0] = 130.0
+    permit = breaker.allow_request()
+    now[0] = clock_value
+
+    with pytest.raises(ValueError, match="clock reading must be finite"):
+        breaker.allow_request()
+
+    assert_breaker_state(breaker, CircuitState.HALF_OPEN)
+    now[0] = 135.0
+    breaker.record_success(permit)
+    assert_breaker_state(breaker, CircuitState.CLOSED)
+
+
+@pytest.mark.parametrize("clock_value", [float("nan"), float("inf"), float("-inf")])
+@pytest.mark.parametrize(
+    ("outcome", "expected_state"),
+    [
+        ("record_success", CircuitState.CLOSED),
+        ("record_failure", CircuitState.OPEN),
+    ],
+)
+def test_half_open_outcome_rejects_non_finite_clock_without_consuming_probe(
+    clock_value: float,
+    outcome: str,
+    expected_state: CircuitState,
+) -> None:
+    now = [100.0]
+    breaker = CircuitBreaker(1, 30.0, clock=lambda: now[0])
+    breaker.record_failure()
+    now[0] = 130.0
+    permit = breaker.allow_request()
+    now[0] = clock_value
+
+    with pytest.raises(ValueError, match="clock reading must be finite"):
+        getattr(breaker, outcome)(permit)
+
+    assert_breaker_state(breaker, CircuitState.HALF_OPEN)
+    now[0] = 135.0
+    getattr(breaker, outcome)(permit)
+    assert_breaker_state(breaker, expected_state)
+
+
+@pytest.mark.parametrize("clock_value", [float("nan"), float("inf"), float("-inf")])
+def test_threshold_failure_rejects_non_finite_clock_before_mutating_state_or_count(
+    clock_value: float,
+) -> None:
+    now = [100.0]
+    breaker = CircuitBreaker(3, 30.0, clock=lambda: now[0])
+    breaker.record_failure(breaker.allow_request())
+    breaker.record_failure(breaker.allow_request())
+    permit = breaker.allow_request()
+    now[0] = clock_value
+
+    with pytest.raises(ValueError, match="clock reading must be finite"):
+        breaker.record_failure(permit)
+
+    assert_breaker_state(breaker, CircuitState.CLOSED)
+    now[0] = 100.0
+    breaker.record_failure(permit)
+    assert_breaker_state(breaker, CircuitState.OPEN)
 
 
 @pytest.mark.parametrize(
