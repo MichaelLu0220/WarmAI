@@ -20,10 +20,7 @@ async def _enable_wal(connection: aiosqlite.Connection) -> None:
         except sqlite3.OperationalError as error:
             error_code = getattr(error, "sqlite_errorcode", None)
             primary_error_code = error_code & 0xFF if isinstance(error_code, int) else None
-            if (
-                primary_error_code not in _SQLITE_LOCK_ERRORS
-                or loop.time() >= deadline
-            ):
+            if primary_error_code not in _SQLITE_LOCK_ERRORS or loop.time() >= deadline:
                 raise
             await asyncio.sleep(0.01)
 

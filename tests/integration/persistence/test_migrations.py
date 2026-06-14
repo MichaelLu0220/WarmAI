@@ -44,9 +44,7 @@ async def test_migrations_are_idempotent(tmp_path: Path) -> None:
     await run_migrations(database, Path("migrations"))
 
     async with database.connect() as connection:
-        cursor = await connection.execute(
-            "SELECT version FROM schema_migrations ORDER BY version"
-        )
+        cursor = await connection.execute("SELECT version FROM schema_migrations ORDER BY version")
 
         assert await cursor.fetchall() == [(1,)]
 
@@ -190,9 +188,7 @@ async def test_transaction_words_in_comments_and_strings_are_allowed(tmp_path: P
         value_cursor = await connection.execute("SELECT value FROM allowed_values")
 
         assert await version_cursor.fetchall() == [(1,)]
-        assert await value_cursor.fetchall() == [
-            ("BEGIN COMMIT ROLLBACK END SAVEPOINT RELEASE",)
-        ]
+        assert await value_cursor.fetchall() == [("BEGIN COMMIT ROLLBACK END SAVEPOINT RELEASE",)]
 
 
 @pytest.mark.asyncio
@@ -236,8 +232,7 @@ async def test_unknown_statement_prefix_rejects_whole_migration(tmp_path: Path) 
             "SELECT version FROM schema_migrations ORDER BY version"
         )
         table_cursor = await connection.execute(
-            "SELECT name FROM sqlite_master "
-            "WHERE type = 'table' AND name = 'should_not_exist'"
+            "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'should_not_exist'"
         )
 
         assert await version_cursor.fetchall() == []
@@ -263,8 +258,7 @@ async def test_incomplete_sql_rejects_whole_migration(tmp_path: Path) -> None:
             "SELECT version FROM schema_migrations ORDER BY version"
         )
         table_cursor = await connection.execute(
-            "SELECT name FROM sqlite_master "
-            "WHERE type = 'table' AND name = 'should_not_exist'"
+            "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'should_not_exist'"
         )
 
         assert await version_cursor.fetchall() == []
@@ -357,9 +351,7 @@ async def test_stale_read_harness_exposes_prior_runner_race(
                 """
             )
             await connection.commit()
-            async with connection.execute(
-                "SELECT version FROM schema_migrations"
-            ) as cursor:
+            async with connection.execute("SELECT version FROM schema_migrations") as cursor:
                 applied = {int(row[0]) for row in await cursor.fetchall()}
 
             if 1 in applied:
@@ -369,9 +361,7 @@ async def test_stale_read_harness_exposes_prior_runner_race(
                 await connection.execute(
                     (migration_directory / "001_create.sql").read_text(encoding="utf-8")
                 )
-                await connection.execute(
-                    "INSERT INTO schema_migrations (version) VALUES (1)"
-                )
+                await connection.execute("INSERT INTO schema_migrations (version) VALUES (1)")
                 await connection.commit()
             except BaseException:
                 await connection.rollback()

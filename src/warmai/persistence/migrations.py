@@ -3,9 +3,7 @@ from pathlib import Path
 
 from warmai.persistence.database import Database
 
-_TRANSACTION_CONTROL = frozenset(
-    {"BEGIN", "COMMIT", "END", "RELEASE", "ROLLBACK", "SAVEPOINT"}
-)
+_TRANSACTION_CONTROL = frozenset({"BEGIN", "COMMIT", "END", "RELEASE", "ROLLBACK", "SAVEPOINT"})
 
 
 def _migration_version(path: Path) -> int:
@@ -53,9 +51,7 @@ def _first_sql_keyword(statement: str) -> str | None:
         return None
 
     keyword_start = index
-    while index < len(statement) and (
-        statement[index].isalpha() or statement[index] == "_"
-    ):
+    while index < len(statement) and (statement[index].isalpha() or statement[index] == "_"):
         index += 1
     if keyword_start == index:
         preview = statement[keyword_start : keyword_start + 20].splitlines()[0]
