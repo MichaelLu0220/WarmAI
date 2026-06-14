@@ -77,6 +77,32 @@ def test_masks_contextual_name_with_follow_on_or_separator(
 
 
 @pytest.mark.parametrize(
+    ("text", "expected_span", "expected"),
+    [
+        (
+            "聯絡周杰倫",
+            PiiSpan(start=2, end=5, kind="PERSON"),
+            "聯絡[PERSON_001]",
+        ),
+        (
+            "提醒司馬懿明天開會",
+            PiiSpan(start=2, end=5, kind="PERSON"),
+            "提醒[PERSON_001]明天開會",
+        ),
+    ],
+)
+def test_masks_generic_contextual_chinese_names(
+    text: str,
+    expected_span: PiiSpan,
+    expected: str,
+) -> None:
+    detections = detect_pii(text)
+
+    assert detections == [expected_span]
+    assert mask_text(text, detections) == expected
+
+
+@pytest.mark.parametrize(
     "text",
     [
         "找時間",

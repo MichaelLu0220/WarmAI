@@ -22,7 +22,7 @@ PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
     ("TW_ID", re.compile(r"\b[A-Z][12]\d{8}\b", re.I)),
     ("IP", re.compile(r"\b(?:\d{1,3}\.){3}\d{1,3}\b")),
 )
-COMMON_SURNAMES = frozenset("王李張陳林黃吳劉蔡楊")
+NON_PERSON_PHRASES = frozenset({"時間", "事項", "客服", "大家", "三點"})
 CONTEXTUAL_NAME = re.compile(
     r"(?:提醒|聯絡|寄給|打給|告訴|找|約)[ \t]*"
     r"(?:(?::|\N{FULLWIDTH COLON})[ \t]*|\r?\n[ \t]*)?"
@@ -34,7 +34,7 @@ CONTEXTUAL_NAME = re.compile(
 
 
 def _is_likely_name(value: str) -> bool:
-    return value[0] in COMMON_SURNAMES
+    return value not in NON_PERSON_PHRASES
 
 
 def detect_pii(text: str) -> list[PiiSpan]:
