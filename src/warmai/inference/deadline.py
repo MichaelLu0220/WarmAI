@@ -24,7 +24,10 @@ class Deadline:
         return cls(_read_clock(clock) + seconds, clock)
 
     def remaining(self) -> float:
-        return max(0.0, self.expires_at - _read_clock(self.clock))
+        remaining = self.expires_at - _read_clock(self.clock)
+        if not math.isfinite(remaining):
+            raise ValueError("remaining time must be finite")
+        return max(0.0, remaining)
 
     def has(self, minimum_seconds: float) -> bool:
         if not math.isfinite(minimum_seconds) or minimum_seconds < 0:

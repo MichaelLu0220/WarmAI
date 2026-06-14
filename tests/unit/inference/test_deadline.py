@@ -65,3 +65,12 @@ def test_deadline_remaining_rejects_non_finite_clock_reading(clock_value: float)
 
     with pytest.raises(ValueError, match="clock reading must be finite"):
         deadline.remaining()
+
+
+@pytest.mark.parametrize("direction", [-1.0, 1.0])
+def test_deadline_remaining_rejects_non_finite_computed_value(direction: float) -> None:
+    largest_finite = float.fromhex("0x1.fffffffffffffp+1023")
+    deadline = Deadline(direction * largest_finite, clock=lambda: -direction * largest_finite)
+
+    with pytest.raises(ValueError, match="remaining time must be finite"):
+        deadline.remaining()

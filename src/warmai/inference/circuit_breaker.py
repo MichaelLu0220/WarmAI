@@ -36,11 +36,12 @@ class CircuitBreaker:
     """Single-worker backend-availability circuit breaker.
 
     ``allow_request`` returns a truth-testable permit. Closed-state outcomes
-    may be recorded without it. Half-open outcomes must return the exact
-    active permit so expired, foreign, consumed, and stale probes are rejected.
+    may be recorded without it. When supplied, an outcome permit must be the
+    exact active object so copied, foreign, consumed, and stale permits fail.
     """
 
     __slots__ = (
+        "_active_permit",
         "_active_probe_generation",
         "_breaker_identity",
         "_clock",
@@ -72,6 +73,7 @@ class CircuitBreaker:
         self._failures = 0
         self._opened_at = 0.0
         self._half_open_probe_started_at: float | None = None
+        self._active_permit: AdmissionPermit | None = None
         self._active_probe_generation: int | None = None
         self._next_probe_generation = 0
 
@@ -89,7 +91,14 @@ class CircuitBreaker:
 
     def allow_request(self) -> AdmissionPermit:
         if self._state is CircuitState.CLOSED:
-            return AdmissionPermit(True, self._breaker_identity, None, _PERMIT_CREATION_KEY)
+            permit = AdmissionPermit(
+                True,
+                self._breaker_identity,
+                None,
+                _PERMIT_CREATION_KEY,
+            )
+            self._active_permit = permit
+            return permit
         now = self._read_clock()
         if self._state is CircuitState.OPEN:
             if now - self._opened_at < self._recovery_seconds:
@@ -112,7 +121,7 @@ class CircuitBreaker:
             self._validate_closed_permit(permit)
         self._state = CircuitState.CLOSED
         self._failures = 0
-        self._clear_half_open_probe()
+        self._clear_active_admission()
 
     def record_failure(self, permit: AdmissionPermit | None = None) -> None:
         if self._state is CircuitState.OPEN:
@@ -122,7 +131,7 @@ class CircuitBreaker:
             self._require_active_half_open_permit(permit, now)
             self._state = CircuitState.OPEN
             self._opened_at = now
-            self._clear_half_open_probe()
+            self._clear_active_admission()
             return
         if permit is not None:
             self._validate_closed_permit(permit)
@@ -133,22 +142,26 @@ class CircuitBreaker:
             self._failures = next_failures
             self._state = CircuitState.OPEN
             self._opened_at = now
-            self._clear_half_open_probe()
+            self._clear_active_admission()
             return
         self._failures = next_failures
+        self._clear_active_admission()
 
     def _admit_half_open_probe(self, now: float) -> AdmissionPermit:
         self._next_probe_generation += 1
         self._active_probe_generation = self._next_probe_generation
         self._half_open_probe_started_at = now
-        return AdmissionPermit(
+        permit = AdmissionPermit(
             True,
             self._breaker_identity,
             self._active_probe_generation,
             _PERMIT_CREATION_KEY,
         )
+        self._active_permit = permit
+        return permit
 
-    def _clear_half_open_probe(self) -> None:
+    def _clear_active_admission(self) -> None:
+        self._active_permit = None
         self._active_probe_generation = None
         self._half_open_probe_started_at = None
 
@@ -166,6 +179,8 @@ class CircuitBreaker:
             or now - self._half_open_probe_started_at >= self._recovery_seconds
         ):
             raise RuntimeError("half-open probe is not active")
+        if permit is not self._active_permit:
+            raise RuntimeError("permit does not match active half-open probe")
         if permit._probe_generation != self._active_probe_generation:
             raise RuntimeError("permit does not match active half-open probe")
 
@@ -174,6 +189,10 @@ class CircuitBreaker:
             raise RuntimeError("admitted permit is required")
         if permit._breaker_identity is not self._breaker_identity:
             raise RuntimeError("permit belongs to a different circuit breaker")
+        if permit is not self._active_permit:
+            if permit._probe_generation is not None:
+                raise RuntimeError("half-open permit is no longer active")
+            raise RuntimeError("permit is no longer active")
         if permit._probe_generation is not None:
             raise RuntimeError("half-open permit is no longer active")
 

@@ -1,3 +1,4 @@
+from copy import copy, deepcopy
 from dataclasses import FrozenInstanceError
 
 import pytest
@@ -138,6 +139,69 @@ def test_closed_failure_accepts_matching_admission_permit_and_opens_at_threshold
     assert_breaker_state(breaker, CircuitState.CLOSED)
     breaker.record_failure(breaker.allow_request())
     assert_breaker_state(breaker, CircuitState.OPEN)
+
+
+@pytest.mark.parametrize("outcome", ["record_success", "record_failure"])
+def test_closed_permit_is_consumed_after_one_outcome(outcome: str) -> None:
+    breaker = CircuitBreaker(3, 30.0, clock=lambda: 100.0)
+    permit = breaker.allow_request()
+
+    getattr(breaker, outcome)(permit)
+
+    with pytest.raises(RuntimeError):
+        getattr(breaker, outcome)(permit)
+
+    assert_breaker_state(breaker, CircuitState.CLOSED)
+
+
+def test_closed_permitless_outcome_consumes_active_permit() -> None:
+    breaker = CircuitBreaker(3, 30.0, clock=lambda: 100.0)
+    permit = breaker.allow_request()
+
+    breaker.record_success()
+
+    with pytest.raises(RuntimeError):
+        breaker.record_success(permit)
+
+    assert_breaker_state(breaker, CircuitState.CLOSED)
+
+
+def test_latest_closed_permit_is_the_only_active_admission() -> None:
+    breaker = CircuitBreaker(3, 30.0, clock=lambda: 100.0)
+    stale_permit = breaker.allow_request()
+    active_permit = breaker.allow_request()
+
+    with pytest.raises(RuntimeError):
+        breaker.record_success(stale_permit)
+
+    breaker.record_success(active_permit)
+    assert_breaker_state(breaker, CircuitState.CLOSED)
+
+
+@pytest.mark.parametrize("use_deepcopy", [False, True], ids=["copy", "deepcopy"])
+@pytest.mark.parametrize("half_open", [False, True], ids=["closed", "half-open"])
+def test_copied_permit_cannot_report_an_outcome(
+    use_deepcopy: bool,
+    half_open: bool,
+) -> None:
+    now = [100.0]
+    breaker = CircuitBreaker(1 if half_open else 3, 30.0, clock=lambda: now[0])
+    if half_open:
+        breaker.record_failure()
+        now[0] = 130.0
+    permit = breaker.allow_request()
+    copied_permit = (
+        deepcopy(permit, {id(permit._breaker_identity): permit._breaker_identity})
+        if use_deepcopy
+        else copy(permit)
+    )
+
+    assert copied_permit is not permit
+    with pytest.raises(RuntimeError):
+        breaker.record_success(copied_permit)
+
+    breaker.record_success(permit)
+    assert_breaker_state(breaker, CircuitState.CLOSED)
 
 
 @pytest.mark.parametrize("outcome", ["record_success", "record_failure"])
