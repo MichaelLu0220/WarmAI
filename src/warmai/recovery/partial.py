@@ -12,8 +12,8 @@ FieldName = str
 @dataclass(frozen=True)
 class PartialRecovery:
     output: ModelOutput
-    recovered: tuple[FieldName, ...]
-    defaulted: tuple[FieldName, ...]
+    recovered_fields: list[str]
+    defaulted_fields: list[str]
 
 
 def safe_default(language: PrimaryLanguage) -> ModelOutput:
@@ -21,8 +21,8 @@ def safe_default(language: PrimaryLanguage) -> ModelOutput:
         warning = "模型輸出不完整。已套用安全預設值。"
         reason = "無法完整分析。請人工確認。"
     else:
-        warning = "Model output was incomplete; safe defaults were applied."
-        reason = "The analysis was incomplete and requires human review."
+        warning = "AI analysis unavailable."
+        reason = "A default score was used."
 
     return ModelOutput(
         suggested_text=None,
@@ -49,13 +49,6 @@ def recover_partial(
             defaulted.append(field_name)
             continue
 
-        if field_name == "needs_review":
-            if data[field_name] is True:
-                recovered.append(field_name)
-            else:
-                defaulted.append(field_name)
-            continue
-
         if not _has_exact_contract_type(field_name, data[field_name]):
             defaulted.append(field_name)
             continue
@@ -73,8 +66,8 @@ def recover_partial(
     values["needs_review"] = True
     return PartialRecovery(
         output=ModelOutput.model_validate(values, strict=True),
-        recovered=tuple(recovered),
-        defaulted=tuple(defaulted),
+        recovered_fields=recovered,
+        defaulted_fields=defaulted,
     )
 
 
@@ -89,4 +82,6 @@ def _has_exact_contract_type(field_name: FieldName, value: object) -> bool:
         return type(value) is list and all(type(item) is str for item in value)
     if field_name == "reason":
         return type(value) is str
+    if field_name == "needs_review":
+        return type(value) is bool
     return False

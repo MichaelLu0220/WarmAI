@@ -1,4 +1,5 @@
-from dataclasses import FrozenInstanceError
+from dataclasses import FrozenInstanceError, fields
+from typing import get_type_hints
 
 import pytest
 from pydantic import ValidationError
@@ -7,7 +8,7 @@ from warmai.contracts.common import PrimaryLanguage
 from warmai.contracts.task_analysis import ModelOutput
 from warmai.recovery.partial import PartialRecovery, recover_partial, safe_default
 
-FIELD_ORDER = (
+FIELD_ORDER = [
     "suggested_text",
     "score",
     "correction_confidence",
@@ -15,7 +16,7 @@ FIELD_ORDER = (
     "warnings",
     "reason",
     "needs_review",
-)
+]
 
 
 @pytest.mark.parametrize(
@@ -28,8 +29,8 @@ FIELD_ORDER = (
         ),
         (
             PrimaryLanguage.EN,
-            "Model output was incomplete; safe defaults were applied.",
-            "The analysis was incomplete and requires human review.",
+            "AI analysis unavailable.",
+            "A default score was used.",
         ),
     ],
 )
@@ -55,6 +56,18 @@ def test_partial_recovery_is_immutable() -> None:
     recovery = recover_partial({}, PrimaryLanguage.EN)
 
     assert isinstance(recovery, PartialRecovery)
+    assert [field.name for field in fields(recovery)] == [
+        "output",
+        "recovered_fields",
+        "defaulted_fields",
+    ]
+    assert get_type_hints(PartialRecovery) == {
+        "output": ModelOutput,
+        "recovered_fields": list[str],
+        "defaulted_fields": list[str],
+    }
+    assert isinstance(recovery.recovered_fields, list)
+    assert isinstance(recovery.defaulted_fields, list)
     with pytest.raises(FrozenInstanceError):
         recovery.output = safe_default(PrimaryLanguage.EN)
 
@@ -73,8 +86,8 @@ def test_recovers_each_valid_field_and_tracks_provenance_in_model_order() -> Non
     recovery = recover_partial(data, PrimaryLanguage.EN)
 
     assert recovery.output == ModelOutput(**data)
-    assert recovery.recovered == FIELD_ORDER
-    assert recovery.defaulted == ()
+    assert recovery.recovered_fields == FIELD_ORDER
+    assert recovery.defaulted_fields == []
 
 
 def test_invalid_and_missing_fields_use_defaults_without_affecting_valid_fields() -> None:
@@ -100,17 +113,17 @@ def test_invalid_and_missing_fields_use_defaults_without_affecting_valid_fields(
         reason=defaults.reason,
         needs_review=True,
     )
-    assert recovery.recovered == (
+    assert recovery.recovered_fields == [
         "suggested_text",
         "correction_confidence",
         "warnings",
-    )
-    assert recovery.defaulted == (
+    ]
+    assert recovery.defaulted_fields == [
         "score",
         "score_confidence",
         "reason",
         "needs_review",
-    )
+    ]
 
 
 def test_strict_contract_types_are_not_coerced() -> None:
@@ -127,8 +140,8 @@ def test_strict_contract_types_are_not_coerced() -> None:
         PrimaryLanguage.EN,
     )
 
-    assert recovery.recovered == ()
-    assert recovery.defaulted == FIELD_ORDER
+    assert recovery.recovered_fields == []
+    assert recovery.defaulted_fields == FIELD_ORDER
     assert recovery.output == safe_default(PrimaryLanguage.EN)
 
 
@@ -143,11 +156,11 @@ def test_unknown_input_keys_do_not_enter_output_or_provenance() -> None:
 
     assert recovery.output.score == 5
     assert "unknown" not in recovery.output.model_dump()
-    assert "unknown" not in recovery.recovered
-    assert "unknown" not in recovery.defaulted
+    assert "unknown" not in recovery.recovered_fields
+    assert "unknown" not in recovery.defaulted_fields
 
 
-def test_false_needs_review_is_defaulted_because_policy_forces_true() -> None:
+def test_false_needs_review_is_recovered_before_policy_forces_output_true() -> None:
     recovery = recover_partial(
         {
             "needs_review": False,
@@ -156,8 +169,8 @@ def test_false_needs_review_is_defaulted_because_policy_forces_true() -> None:
     )
 
     assert recovery.output.needs_review is True
-    assert recovery.recovered == ()
-    assert recovery.defaulted == FIELD_ORDER
+    assert recovery.recovered_fields == ["needs_review"]
+    assert recovery.defaulted_fields == FIELD_ORDER[:-1]
 
 
 def test_partial_recovery_output_remains_contract_valid() -> None:
