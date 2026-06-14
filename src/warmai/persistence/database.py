@@ -1,8 +1,29 @@
+import asyncio
+import sqlite3
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from pathlib import Path
 
 import aiosqlite
+
+_SQLITE_LOCK_ERRORS = {sqlite3.SQLITE_BUSY, sqlite3.SQLITE_LOCKED}
+_WAL_RETRY_SECONDS = 30.0
+
+
+async def _enable_wal(connection: aiosqlite.Connection) -> None:
+    loop = asyncio.get_running_loop()
+    deadline = loop.time() + _WAL_RETRY_SECONDS
+    while True:
+        try:
+            await connection.execute("PRAGMA journal_mode = WAL")
+            return
+        except sqlite3.OperationalError as error:
+            if (
+                getattr(error, "sqlite_errorcode", None) not in _SQLITE_LOCK_ERRORS
+                or loop.time() >= deadline
+            ):
+                raise
+            await asyncio.sleep(0.01)
 
 
 class Database:
@@ -12,9 +33,10 @@ class Database:
     @asynccontextmanager
     async def connect(self) -> AsyncIterator[aiosqlite.Connection]:
         self.path.parent.mkdir(parents=True, exist_ok=True)
-        connection = await aiosqlite.connect(self.path)
+        connection = await aiosqlite.connect(self.path, timeout=30.0)
         try:
-            await connection.execute("PRAGMA journal_mode = WAL")
+            await connection.execute("PRAGMA busy_timeout = 30000")
+            await _enable_wal(connection)
             await connection.execute("PRAGMA foreign_keys = ON")
             yield connection
         finally:

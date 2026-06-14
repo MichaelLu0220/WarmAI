@@ -1,3 +1,4 @@
+from dataclasses import fields
 from pathlib import Path
 
 import pytest
@@ -45,6 +46,7 @@ async def test_event_repository_stores_and_retrieves_only_masked_fields(
     assert stored.defaulted_fields == ["warnings"]
 
     async with database.connect() as connection:
+        schema_cursor = await connection.execute("PRAGMA table_info(inference_events)")
         cursor = await connection.execute(
             """
             SELECT raw_text_masked, raw_model_output_masked, response_json_masked
@@ -53,8 +55,28 @@ async def test_event_repository_stores_and_retrieves_only_masked_fields(
             """,
             (event.request_id,),
         )
+        inference_event_columns = {row[1] for row in await schema_cursor.fetchall()}
         persisted_masked_fields = await cursor.fetchone()
 
+    masked_payload_columns = {
+        "raw_text_masked",
+        "raw_model_output_masked",
+        "response_json_masked",
+    }
+    repository_event_fields = {field.name for field in fields(InferenceEvent)}
+    schema_payload_columns = {
+        name
+        for name in inference_event_columns
+        if name.startswith(("raw_text", "raw_model_output", "response_json"))
+    }
+    repository_payload_fields = {
+        name
+        for name in repository_event_fields
+        if name.startswith(("raw_text", "raw_model_output", "response_json"))
+    }
+
+    assert schema_payload_columns == masked_payload_columns
+    assert repository_payload_fields == masked_payload_columns
     assert persisted_masked_fields == (
         event.raw_text_masked,
         event.raw_model_output_masked,
