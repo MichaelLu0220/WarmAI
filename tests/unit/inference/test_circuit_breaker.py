@@ -8,7 +8,7 @@ from warmai.inference.adapters.base import (
     InferenceAdapter,
 )
 from warmai.inference.adapters.mock import MockAdapter
-from warmai.inference.circuit_breaker import CircuitBreaker, CircuitState
+from warmai.inference.circuit_breaker import AdmissionPermit, CircuitBreaker, CircuitState
 
 DEFAULT_MOCK_OUTPUT = (
     '{"suggested_text":null,"score":3,'
@@ -53,7 +53,9 @@ def test_recovered_breaker_permits_exactly_one_half_open_probe() -> None:
     breaker.record_failure()
     now[0] = 130.0
 
-    assert breaker.allow_request()
+    permit = breaker.allow_request()
+
+    assert permit
     assert_breaker_state(breaker, CircuitState.HALF_OPEN)
     assert not breaker.allow_request()
 
@@ -63,13 +65,21 @@ def test_abandoned_half_open_probe_is_replaced_after_lease_expires() -> None:
     breaker = CircuitBreaker(1, 30.0, clock=lambda: now[0])
     breaker.record_failure()
     now[0] = 130.0
-    assert breaker.allow_request()
+    permit_a = breaker.allow_request()
+    assert permit_a
 
     now[0] = 159.999
     assert not breaker.allow_request()
     now[0] = 160.0
-    assert breaker.allow_request()
+    permit_b = breaker.allow_request()
+    assert permit_b
     assert not breaker.allow_request()
+
+    with pytest.raises(RuntimeError, match="permit does not match active half-open probe"):
+        breaker.record_success(permit_a)
+
+    breaker.record_success(permit_b)
+    assert_breaker_state(breaker, CircuitState.CLOSED)
 
 
 def test_successful_half_open_probe_closes_and_resets_breaker() -> None:
@@ -79,9 +89,10 @@ def test_successful_half_open_probe_closes_and_resets_breaker() -> None:
     breaker.record_failure()
     breaker.record_failure()
     now[0] = 130.0
-    assert breaker.allow_request()
+    permit = breaker.allow_request()
+    assert permit
 
-    breaker.record_success()
+    breaker.record_success(permit)
 
     assert_breaker_state(breaker, CircuitState.CLOSED)
     assert breaker.allow_request()
@@ -109,10 +120,11 @@ def test_failed_half_open_probe_reopens_and_restarts_recovery() -> None:
     breaker = CircuitBreaker(1, 30.0, clock=lambda: now[0])
     breaker.record_failure()
     now[0] = 130.0
-    assert breaker.allow_request()
+    permit = breaker.allow_request()
+    assert permit
 
     now[0] = 135.0
-    breaker.record_failure()
+    breaker.record_failure(permit)
 
     assert_breaker_state(breaker, CircuitState.OPEN)
     now[0] = 164.999
@@ -147,14 +159,121 @@ def test_half_open_outcome_requires_an_unexpired_admitted_probe(outcome: str) ->
     breaker = CircuitBreaker(1, 30.0, clock=lambda: now[0])
     breaker.record_failure()
     now[0] = 130.0
-    assert breaker.allow_request()
+    permit = breaker.allow_request()
+    assert permit
     now[0] = 160.0
 
     with pytest.raises(RuntimeError, match="half-open probe is not active"):
-        getattr(breaker, outcome)()
+        getattr(breaker, outcome)(permit)
 
     assert_breaker_state(breaker, CircuitState.HALF_OPEN)
     assert breaker.allow_request()
+
+
+@pytest.mark.parametrize(
+    ("outcome", "expected_state"),
+    [
+        ("record_success", CircuitState.CLOSED),
+        ("record_failure", CircuitState.OPEN),
+    ],
+)
+def test_stale_probe_outcome_cannot_complete_replacement_probe(
+    outcome: str,
+    expected_state: CircuitState,
+) -> None:
+    now = [100.0]
+    breaker = CircuitBreaker(1, 30.0, clock=lambda: now[0])
+    breaker.record_failure()
+    now[0] = 130.0
+    permit_a = breaker.allow_request()
+    assert permit_a
+
+    now[0] = 160.0
+    permit_b = breaker.allow_request()
+    assert permit_b
+
+    with pytest.raises(RuntimeError, match="permit does not match active half-open probe"):
+        getattr(breaker, outcome)(permit_a)
+
+    assert_breaker_state(breaker, CircuitState.HALF_OPEN)
+    assert not breaker.allow_request()
+
+    getattr(breaker, outcome)(permit_b)
+
+    assert_breaker_state(breaker, expected_state)
+
+
+def test_half_open_rejects_permit_from_another_breaker() -> None:
+    now = [100.0]
+    first = CircuitBreaker(1, 30.0, clock=lambda: now[0])
+    second = CircuitBreaker(1, 30.0, clock=lambda: now[0])
+    first.record_failure()
+    second.record_failure()
+    now[0] = 130.0
+    first_permit = first.allow_request()
+    second_permit = second.allow_request()
+    assert first_permit
+    assert second_permit
+
+    with pytest.raises(RuntimeError, match="permit belongs to a different circuit breaker"):
+        second.record_success(first_permit)
+
+    assert_breaker_state(second, CircuitState.HALF_OPEN)
+    second.record_success(second_permit)
+    assert_breaker_state(second, CircuitState.CLOSED)
+
+
+def test_consumed_half_open_permit_cannot_be_reused() -> None:
+    now = [100.0]
+    breaker = CircuitBreaker(1, 30.0, clock=lambda: now[0])
+    breaker.record_failure()
+    now[0] = 130.0
+    permit = breaker.allow_request()
+    assert permit
+    breaker.record_success(permit)
+
+    with pytest.raises(RuntimeError, match="half-open permit is no longer active"):
+        breaker.record_success(permit)
+
+    assert_breaker_state(breaker, CircuitState.CLOSED)
+
+
+@pytest.mark.parametrize("outcome", ["record_success", "record_failure"])
+def test_half_open_rejects_bare_boolean_as_permit(outcome: str) -> None:
+    now = [100.0]
+    breaker = CircuitBreaker(1, 30.0, clock=lambda: now[0])
+    breaker.record_failure()
+    now[0] = 130.0
+    permit = breaker.allow_request()
+    assert permit
+
+    with pytest.raises(RuntimeError, match="valid half-open permit is required"):
+        getattr(breaker, outcome)(True)
+
+    assert_breaker_state(breaker, CircuitState.HALF_OPEN)
+    getattr(breaker, outcome)(permit)
+
+
+def test_admission_permits_preserve_boolean_request_checks() -> None:
+    now = [100.0]
+    breaker = CircuitBreaker(1, 30.0, clock=lambda: now[0])
+
+    assert breaker.allow_request()
+    breaker.record_failure()
+
+    denied = breaker.allow_request()
+
+    assert not denied
+    assert isinstance(denied, AdmissionPermit)
+
+
+def test_admission_permits_are_immutable_and_not_directly_constructible() -> None:
+    permit = CircuitBreaker(1, 30.0).allow_request()
+
+    with pytest.raises(FrozenInstanceError):
+        permit._admitted = False  # type: ignore[misc]
+    with pytest.raises(TypeError, match="AdmissionPermit cannot be constructed directly"):
+        AdmissionPermit(True, object(), 1)
 
 
 @pytest.mark.parametrize(

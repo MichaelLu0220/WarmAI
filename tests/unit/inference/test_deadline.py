@@ -3,6 +3,12 @@ import pytest
 from warmai.inference.deadline import Deadline
 
 
+@pytest.mark.parametrize("expires_at", [float("nan"), float("inf"), float("-inf")])
+def test_deadline_rejects_non_finite_direct_expiry(expires_at: float) -> None:
+    with pytest.raises(ValueError, match="expires_at must be finite"):
+        Deadline(expires_at)
+
+
 def test_deadline_uses_remaining_shared_budget() -> None:
     values = iter([10.0, 11.25])
 
@@ -45,3 +51,17 @@ def test_deadline_has_rejects_invalid_minimum(minimum_seconds: float) -> None:
 
     with pytest.raises(ValueError, match="minimum_seconds must be finite and non-negative"):
         deadline.has(minimum_seconds)
+
+
+@pytest.mark.parametrize("clock_value", [float("nan"), float("inf"), float("-inf")])
+def test_deadline_after_rejects_non_finite_clock_reading(clock_value: float) -> None:
+    with pytest.raises(ValueError, match="clock reading must be finite"):
+        Deadline.after(1.0, clock=lambda: clock_value)
+
+
+@pytest.mark.parametrize("clock_value", [float("nan"), float("inf"), float("-inf")])
+def test_deadline_remaining_rejects_non_finite_clock_reading(clock_value: float) -> None:
+    deadline = Deadline(11.0, clock=lambda: clock_value)
+
+    with pytest.raises(ValueError, match="clock reading must be finite"):
+        deadline.remaining()

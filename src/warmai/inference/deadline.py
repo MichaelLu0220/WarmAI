@@ -9,6 +9,10 @@ class Deadline:
     expires_at: float
     clock: Callable[[], float] = time.monotonic
 
+    def __post_init__(self) -> None:
+        if not math.isfinite(self.expires_at):
+            raise ValueError("expires_at must be finite")
+
     @classmethod
     def after(
         cls,
@@ -17,12 +21,19 @@ class Deadline:
     ) -> "Deadline":
         if not math.isfinite(seconds) or seconds <= 0:
             raise ValueError("seconds must be finite and positive")
-        return cls(clock() + seconds, clock)
+        return cls(_read_clock(clock) + seconds, clock)
 
     def remaining(self) -> float:
-        return max(0.0, self.expires_at - self.clock())
+        return max(0.0, self.expires_at - _read_clock(self.clock))
 
     def has(self, minimum_seconds: float) -> bool:
         if not math.isfinite(minimum_seconds) or minimum_seconds < 0:
             raise ValueError("minimum_seconds must be finite and non-negative")
         return self.remaining() >= minimum_seconds
+
+
+def _read_clock(clock: Callable[[], float]) -> float:
+    value = clock()
+    if not math.isfinite(value):
+        raise ValueError("clock reading must be finite")
+    return value
