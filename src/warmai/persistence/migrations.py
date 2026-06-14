@@ -44,10 +44,13 @@ def _first_sql_keyword(statement: str) -> str | None:
         if statement.startswith("/*", index):
             comment_end = statement.find("*/", index + 2)
             if comment_end == -1:
-                return None
+                raise ValueError("Unterminated SQL block comment")
             index = comment_end + 2
             continue
         break
+
+    if index == len(statement):
+        return None
 
     keyword_start = index
     while index < len(statement) and (
@@ -55,7 +58,8 @@ def _first_sql_keyword(statement: str) -> str | None:
     ):
         index += 1
     if keyword_start == index:
-        return None
+        preview = statement[keyword_start : keyword_start + 20].splitlines()[0]
+        raise ValueError(f"Could not identify SQL keyword near {preview!r}")
     return statement[keyword_start:index].upper()
 
 
@@ -84,7 +88,8 @@ def _sql_statements(script: str) -> list[str]:
 
 
 def _migration_statements(path: Path) -> list[str]:
-    statements = _sql_statements(path.read_text(encoding="utf-8"))
+    script = path.read_text(encoding="utf-8").removeprefix("\ufeff")
+    statements = _sql_statements(script)
     for statement in statements:
         keyword = _first_sql_keyword(statement)
         if keyword in _TRANSACTION_CONTROL:

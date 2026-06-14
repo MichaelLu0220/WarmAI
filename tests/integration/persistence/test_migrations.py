@@ -1,10 +1,12 @@
 import asyncio
+import sqlite3
 from pathlib import Path
 
 import aiosqlite
 import pytest
 
-from warmai.persistence.database import Database
+from warmai.persistence import database as database_module
+from warmai.persistence.database import Database, _enable_wal
 from warmai.persistence.migrations import run_migrations
 
 
@@ -168,7 +170,113 @@ async def test_transaction_words_in_comments_and_strings_are_allowed(tmp_path: P
 
 
 @pytest.mark.asyncio
-async def test_concurrent_migration_runs_apply_each_version_once(tmp_path: Path) -> None:
+async def test_bom_prefixed_migration_applies_normally(tmp_path: Path) -> None:
+    migration_directory = tmp_path / "migrations"
+    migration_directory.mkdir()
+    (migration_directory / "001_bom.sql").write_text(
+        "\ufeffCREATE TABLE bom_values (value TEXT NOT NULL);"
+        "INSERT INTO bom_values(value) VALUES ('applied');",
+        encoding="utf-8",
+    )
+    database = Database(tmp_path / "test.db")
+
+    await run_migrations(database, migration_directory)
+
+    async with database.connect() as connection:
+        version_cursor = await connection.execute(
+            "SELECT version FROM schema_migrations ORDER BY version"
+        )
+        value_cursor = await connection.execute("SELECT value FROM bom_values")
+
+        assert await version_cursor.fetchall() == [(1,)]
+        assert await value_cursor.fetchall() == [("applied",)]
+
+
+@pytest.mark.asyncio
+async def test_unknown_statement_prefix_rejects_whole_migration(tmp_path: Path) -> None:
+    migration_directory = tmp_path / "migrations"
+    migration_directory.mkdir()
+    (migration_directory / "001_invalid.sql").write_text(
+        "@INVALID; CREATE TABLE should_not_exist (value TEXT);",
+        encoding="utf-8",
+    )
+    database = Database(tmp_path / "test.db")
+
+    with pytest.raises(ValueError, match="SQL keyword"):
+        await run_migrations(database, migration_directory)
+
+    async with database.connect() as connection:
+        version_cursor = await connection.execute(
+            "SELECT version FROM schema_migrations ORDER BY version"
+        )
+        table_cursor = await connection.execute(
+            "SELECT name FROM sqlite_master "
+            "WHERE type = 'table' AND name = 'should_not_exist'"
+        )
+
+        assert await version_cursor.fetchall() == []
+        assert await table_cursor.fetchall() == []
+
+
+@pytest.mark.asyncio
+async def test_incomplete_sql_rejects_whole_migration(tmp_path: Path) -> None:
+    migration_directory = tmp_path / "migrations"
+    migration_directory.mkdir()
+    (migration_directory / "001_incomplete.sql").write_text(
+        "CREATE TABLE should_not_exist (value TEXT); "
+        "INSERT INTO should_not_exist(value) VALUES ('unterminated);",
+        encoding="utf-8",
+    )
+    database = Database(tmp_path / "test.db")
+
+    with pytest.raises(ValueError, match="Incomplete SQL statement"):
+        await run_migrations(database, migration_directory)
+
+    async with database.connect() as connection:
+        version_cursor = await connection.execute(
+            "SELECT version FROM schema_migrations ORDER BY version"
+        )
+        table_cursor = await connection.execute(
+            "SELECT name FROM sqlite_master "
+            "WHERE type = 'table' AND name = 'should_not_exist'"
+        )
+
+        assert await version_cursor.fetchall() == []
+        assert await table_cursor.fetchall() == []
+
+
+@pytest.mark.asyncio
+async def test_trigger_body_with_begin_and_end_is_preserved(tmp_path: Path) -> None:
+    migration_directory = tmp_path / "migrations"
+    migration_directory.mkdir()
+    (migration_directory / "001_trigger.sql").write_text(
+        """
+        CREATE TABLE source_values (value TEXT NOT NULL);
+        CREATE TABLE copied_values (value TEXT NOT NULL);
+        CREATE TRIGGER copy_value
+        AFTER INSERT ON source_values
+        BEGIN
+            INSERT INTO copied_values(value) VALUES (NEW.value);
+        END;
+        INSERT INTO source_values(value) VALUES ('copied');
+        """,
+        encoding="utf-8",
+    )
+    database = Database(tmp_path / "test.db")
+
+    await run_migrations(database, migration_directory)
+
+    async with database.connect() as connection:
+        cursor = await connection.execute("SELECT value FROM copied_values")
+
+        assert await cursor.fetchall() == [("copied",)]
+
+
+@pytest.mark.asyncio
+async def test_concurrent_migration_runs_apply_each_version_once(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     migration_directory = tmp_path / "migrations"
     migration_directory.mkdir()
     (migration_directory / "001_create.sql").write_text(
@@ -180,6 +288,26 @@ async def test_concurrent_migration_runs_apply_each_version_once(tmp_path: Path)
         encoding="utf-8",
     )
     database = Database(tmp_path / "test.db")
+    stale_read_barrier = asyncio.Barrier(2)
+    original_execute = aiosqlite.Connection.execute
+
+    def synchronize_stale_read(
+        connection: aiosqlite.Connection,
+        sql: str,
+        parameters: object = None,
+    ) -> object:
+        operation = original_execute(connection, sql, parameters)
+        normalized_sql = " ".join(sql.split()).upper()
+        if normalized_sql != "SELECT VERSION FROM SCHEMA_MIGRATIONS":
+            return operation
+
+        async def wait_for_both_stale_reads() -> aiosqlite.Cursor:
+            await stale_read_barrier.wait()
+            return await operation
+
+        return wait_for_both_stale_reads()
+
+    monkeypatch.setattr(aiosqlite.Connection, "execute", synchronize_stale_read)
 
     await asyncio.gather(
         run_migrations(database, migration_directory),
@@ -207,3 +335,91 @@ async def test_nonexistent_migration_directory_fails_before_database_creation(
         await run_migrations(database, tmp_path / "missing")
 
     assert not database_path.exists()
+
+
+@pytest.mark.asyncio
+async def test_enable_wal_retries_busy_then_succeeds(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    calls = 0
+    sleep_delays: list[float] = []
+
+    class BusyThenSuccessfulConnection:
+        async def execute(self, sql: str) -> object:
+            nonlocal calls
+            calls += 1
+            assert sql == "PRAGMA journal_mode = WAL"
+            if calls == 1:
+                error = sqlite3.OperationalError("database is locked")
+                error.sqlite_errorcode = sqlite3.SQLITE_BUSY
+                raise error
+            return object()
+
+    async def record_sleep(delay: float) -> None:
+        sleep_delays.append(delay)
+
+    monkeypatch.setattr(asyncio, "sleep", record_sleep)
+
+    await _enable_wal(BusyThenSuccessfulConnection())  # type: ignore[arg-type]
+
+    assert calls == 2
+    assert sleep_delays == [0.01]
+
+
+@pytest.mark.asyncio
+async def test_enable_wal_propagates_non_lock_error_immediately(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    calls = 0
+    sleep_delays: list[float] = []
+    expected_error = sqlite3.OperationalError("not a database")
+    expected_error.sqlite_errorcode = sqlite3.SQLITE_NOTADB
+
+    class InvalidDatabaseConnection:
+        async def execute(self, sql: str) -> object:
+            nonlocal calls
+            calls += 1
+            assert sql == "PRAGMA journal_mode = WAL"
+            raise expected_error
+
+    async def record_sleep(delay: float) -> None:
+        sleep_delays.append(delay)
+
+    monkeypatch.setattr(asyncio, "sleep", record_sleep)
+
+    with pytest.raises(sqlite3.OperationalError) as captured:
+        await _enable_wal(InvalidDatabaseConnection())  # type: ignore[arg-type]
+
+    assert captured.value is expected_error
+    assert calls == 1
+    assert sleep_delays == []
+
+
+@pytest.mark.asyncio
+async def test_enable_wal_stops_retrying_at_deadline(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    calls = 0
+    sleep_delays: list[float] = []
+    expected_error = sqlite3.OperationalError("database is locked")
+    expected_error.sqlite_errorcode = sqlite3.SQLITE_BUSY
+
+    class AlwaysBusyConnection:
+        async def execute(self, sql: str) -> object:
+            nonlocal calls
+            calls += 1
+            assert sql == "PRAGMA journal_mode = WAL"
+            raise expected_error
+
+    async def record_sleep(delay: float) -> None:
+        sleep_delays.append(delay)
+
+    monkeypatch.setattr(database_module, "_WAL_RETRY_SECONDS", 0.0)
+    monkeypatch.setattr(asyncio, "sleep", record_sleep)
+
+    with pytest.raises(sqlite3.OperationalError) as captured:
+        await _enable_wal(AlwaysBusyConnection())  # type: ignore[arg-type]
+
+    assert captured.value is expected_error
+    assert calls == 1
+    assert sleep_delays == []
