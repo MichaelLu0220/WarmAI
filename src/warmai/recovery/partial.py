@@ -1,5 +1,6 @@
 from collections.abc import Mapping
-from dataclasses import dataclass
+from copy import deepcopy
+from dataclasses import FrozenInstanceError
 
 from pydantic import ValidationError
 
@@ -9,17 +10,54 @@ from warmai.contracts.task_analysis import ModelOutput
 FieldName = str
 
 
-@dataclass(frozen=True)
 class PartialRecovery:
-    output: ModelOutput
-    recovered_fields: list[str]
-    defaulted_fields: list[str]
+    __slots__ = (
+        "_defaulted_fields_snapshot",
+        "_output_snapshot",
+        "_recovered_fields_snapshot",
+    )
+
+    _output_snapshot: ModelOutput
+    _recovered_fields_snapshot: tuple[str, ...]
+    _defaulted_fields_snapshot: tuple[str, ...]
+
+    def __init__(
+        self,
+        output: ModelOutput,
+        recovered_fields: list[str],
+        defaulted_fields: list[str],
+    ) -> None:
+        object.__setattr__(self, "_output_snapshot", output.model_copy(deep=True))
+        object.__setattr__(self, "_recovered_fields_snapshot", tuple(recovered_fields))
+        object.__setattr__(self, "_defaulted_fields_snapshot", tuple(defaulted_fields))
+
+    def __setattr__(self, name: str, value: object) -> None:
+        raise FrozenInstanceError(f"cannot assign to field {name!r}")
+
+    @property
+    def output(self) -> ModelOutput:
+        return self._output_snapshot.model_copy(deep=True)
+
+    @property
+    def recovered_fields(self) -> list[str]:
+        return list(self._recovered_fields_snapshot)
+
+    @property
+    def defaulted_fields(self) -> list[str]:
+        return list(self._defaulted_fields_snapshot)
+
+
+PartialRecovery.__annotations__ = {
+    "output": ModelOutput,
+    "recovered_fields": list[str],
+    "defaulted_fields": list[str],
+}
 
 
 def safe_default(language: PrimaryLanguage) -> ModelOutput:
     if language is PrimaryLanguage.ZH_TW:
-        warning = "模型輸出不完整。已套用安全預設值。"
-        reason = "無法完整分析。請人工確認。"
+        warning = "AI 分析暫時無法使用。"
+        reason = "目前使用預設分數。"
     else:
         warning = "AI analysis unavailable."
         reason = "A default score was used."
@@ -53,7 +91,7 @@ def recover_partial(
             defaulted.append(field_name)
             continue
 
-        candidate = values.copy()
+        candidate = deepcopy(defaults.model_dump())
         candidate[field_name] = data[field_name]
         try:
             validated = ModelOutput.model_validate(candidate, strict=True)

@@ -1,5 +1,5 @@
-from dataclasses import FrozenInstanceError, fields
-from typing import get_type_hints
+from dataclasses import FrozenInstanceError
+from typing import Any, get_type_hints
 
 import pytest
 from pydantic import ValidationError
@@ -24,8 +24,8 @@ FIELD_ORDER = [
     [
         (
             PrimaryLanguage.ZH_TW,
-            "模型輸出不完整。已套用安全預設值。",
-            "無法完整分析。請人工確認。",
+            "AI 分析暫時無法使用。",
+            "目前使用預設分數。",
         ),
         (
             PrimaryLanguage.EN,
@@ -56,11 +56,6 @@ def test_partial_recovery_is_immutable() -> None:
     recovery = recover_partial({}, PrimaryLanguage.EN)
 
     assert isinstance(recovery, PartialRecovery)
-    assert [field.name for field in fields(recovery)] == [
-        "output",
-        "recovered_fields",
-        "defaulted_fields",
-    ]
     assert get_type_hints(PartialRecovery) == {
         "output": ModelOutput,
         "recovered_fields": list[str],
@@ -69,7 +64,80 @@ def test_partial_recovery_is_immutable() -> None:
     assert isinstance(recovery.recovered_fields, list)
     assert isinstance(recovery.defaulted_fields, list)
     with pytest.raises(FrozenInstanceError):
-        recovery.output = safe_default(PrimaryLanguage.EN)
+        recovery.output = safe_default(PrimaryLanguage.EN)  # type: ignore[misc]
+
+
+def test_returned_values_are_defensive_copies() -> None:
+    recovery = recover_partial(
+        {
+            "warnings": ["Original warning."],
+            "reason": "Original reason.",
+        },
+        PrimaryLanguage.EN,
+    )
+
+    output = recovery.output
+    recovered_fields = recovery.recovered_fields
+    defaulted_fields = recovery.defaulted_fields
+    output.score = 5
+    output.warnings.append("Mutated warning.")
+    recovered_fields.clear()
+    defaulted_fields.append("mutated")
+
+    assert recovery.output.score == 3
+    assert recovery.output.warnings == ["Original warning."]
+    assert recovery.recovered_fields == ["warnings", "reason"]
+    assert recovery.defaulted_fields == [
+        "suggested_text",
+        "score",
+        "correction_confidence",
+        "score_confidence",
+        "needs_review",
+    ]
+
+
+def test_each_field_is_validated_against_pristine_defaults(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    original_validate = ModelOutput.model_validate
+    validation_call = 0
+
+    def validate_with_cross_field_rule(
+        cls: type[ModelOutput],
+        /,
+        candidate: object,
+        *,
+        strict: bool | None = None,
+        **kwargs: Any,
+    ) -> ModelOutput:
+        nonlocal validation_call
+        validation_call += 1
+        if (
+            validation_call == 2
+            and isinstance(candidate, dict)
+            and candidate["suggested_text"] is not None
+            and candidate["score"] == 4
+        ):
+            original_validate({**candidate, "score": 87}, strict=True)
+        return original_validate(candidate, strict=strict, **kwargs)
+
+    monkeypatch.setattr(
+        ModelOutput,
+        "model_validate",
+        classmethod(validate_with_cross_field_rule),
+    )
+
+    recovery = recover_partial(
+        {
+            "suggested_text": "Clean the desk.",
+            "score": 4,
+        },
+        PrimaryLanguage.EN,
+    )
+
+    assert recovery.output.suggested_text == "Clean the desk."
+    assert recovery.output.score == 4
+    assert recovery.recovered_fields == ["suggested_text", "score"]
 
 
 def test_recovers_each_valid_field_and_tracks_provenance_in_model_order() -> None:
@@ -85,7 +153,7 @@ def test_recovers_each_valid_field_and_tracks_provenance_in_model_order() -> Non
 
     recovery = recover_partial(data, PrimaryLanguage.EN)
 
-    assert recovery.output == ModelOutput(**data)
+    assert recovery.output == ModelOutput.model_validate(data, strict=True)
     assert recovery.recovered_fields == FIELD_ORDER
     assert recovery.defaulted_fields == []
 
