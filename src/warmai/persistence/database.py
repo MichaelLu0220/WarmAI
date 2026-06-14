@@ -18,8 +18,10 @@ async def _enable_wal(connection: aiosqlite.Connection) -> None:
             await connection.execute("PRAGMA journal_mode = WAL")
             return
         except sqlite3.OperationalError as error:
+            error_code = getattr(error, "sqlite_errorcode", None)
+            primary_error_code = error_code & 0xFF if isinstance(error_code, int) else None
             if (
-                getattr(error, "sqlite_errorcode", None) not in _SQLITE_LOCK_ERRORS
+                primary_error_code not in _SQLITE_LOCK_ERRORS
                 or loop.time() >= deadline
             ):
                 raise

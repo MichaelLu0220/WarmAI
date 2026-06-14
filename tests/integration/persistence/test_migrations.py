@@ -4,10 +4,36 @@ from pathlib import Path
 
 import aiosqlite
 import pytest
+from aiosqlite.context import Result
 
 from warmai.persistence import database as database_module
 from warmai.persistence.database import Database, _enable_wal
 from warmai.persistence.migrations import run_migrations
+
+
+def _synchronize_stale_version_reads(
+    monkeypatch: pytest.MonkeyPatch,
+    barrier: asyncio.Barrier,
+) -> None:
+    original_execute = aiosqlite.Connection.execute
+
+    def synchronize_stale_read(
+        connection: aiosqlite.Connection,
+        sql: str,
+        parameters: object = None,
+    ) -> object:
+        operation = original_execute(connection, sql, parameters)
+        normalized_sql = " ".join(sql.split()).upper()
+        if normalized_sql != "SELECT VERSION FROM SCHEMA_MIGRATIONS":
+            return operation
+
+        async def wait_for_both_stale_reads() -> aiosqlite.Cursor:
+            await barrier.wait()
+            return await operation
+
+        return Result(wait_for_both_stale_reads())
+
+    monkeypatch.setattr(aiosqlite.Connection, "execute", synchronize_stale_read)
 
 
 @pytest.mark.asyncio
@@ -289,25 +315,7 @@ async def test_concurrent_migration_runs_apply_each_version_once(
     )
     database = Database(tmp_path / "test.db")
     stale_read_barrier = asyncio.Barrier(2)
-    original_execute = aiosqlite.Connection.execute
-
-    def synchronize_stale_read(
-        connection: aiosqlite.Connection,
-        sql: str,
-        parameters: object = None,
-    ) -> object:
-        operation = original_execute(connection, sql, parameters)
-        normalized_sql = " ".join(sql.split()).upper()
-        if normalized_sql != "SELECT VERSION FROM SCHEMA_MIGRATIONS":
-            return operation
-
-        async def wait_for_both_stale_reads() -> aiosqlite.Cursor:
-            await stale_read_barrier.wait()
-            return await operation
-
-        return wait_for_both_stale_reads()
-
-    monkeypatch.setattr(aiosqlite.Connection, "execute", synchronize_stale_read)
+    _synchronize_stale_version_reads(monkeypatch, stale_read_barrier)
 
     await asyncio.gather(
         run_migrations(database, migration_directory),
@@ -322,6 +330,55 @@ async def test_concurrent_migration_runs_apply_each_version_once(
 
         assert await version_cursor.fetchall() == [(1,), (2,)]
         assert await value_cursor.fetchall() == [("applied once",)]
+
+
+@pytest.mark.asyncio
+async def test_stale_read_harness_exposes_prior_runner_race(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    migration_directory = tmp_path / "migrations"
+    migration_directory.mkdir()
+    (migration_directory / "001_create.sql").write_text(
+        "CREATE TABLE concurrent_values (value TEXT NOT NULL);",
+        encoding="utf-8",
+    )
+    database = Database(tmp_path / "test.db")
+    stale_read_barrier = asyncio.Barrier(2)
+    _synchronize_stale_version_reads(monkeypatch, stale_read_barrier)
+
+    async def run_with_stale_read() -> None:
+        async with database.connect() as connection:
+            await connection.execute(
+                """
+                CREATE TABLE IF NOT EXISTS schema_migrations (
+                    version INTEGER PRIMARY KEY
+                )
+                """
+            )
+            await connection.commit()
+            async with connection.execute(
+                "SELECT version FROM schema_migrations"
+            ) as cursor:
+                applied = {int(row[0]) for row in await cursor.fetchall()}
+
+            if 1 in applied:
+                return
+            try:
+                await connection.execute("BEGIN IMMEDIATE")
+                await connection.execute(
+                    (migration_directory / "001_create.sql").read_text(encoding="utf-8")
+                )
+                await connection.execute(
+                    "INSERT INTO schema_migrations (version) VALUES (1)"
+                )
+                await connection.commit()
+            except BaseException:
+                await connection.rollback()
+                raise
+
+    with pytest.raises(sqlite3.OperationalError, match="already exists"):
+        await asyncio.gather(run_with_stale_read(), run_with_stale_read())
 
 
 @pytest.mark.asyncio
@@ -361,6 +418,37 @@ async def test_enable_wal_retries_busy_then_succeeds(
     monkeypatch.setattr(asyncio, "sleep", record_sleep)
 
     await _enable_wal(BusyThenSuccessfulConnection())  # type: ignore[arg-type]
+
+    assert calls == 2
+    assert sleep_delays == [0.01]
+
+
+@pytest.mark.asyncio
+async def test_enable_wal_retries_extended_busy_code_then_succeeds(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    calls = 0
+    sleep_delays: list[float] = []
+
+    class BusyRecoveryThenSuccessfulConnection:
+        async def execute(self, sql: str) -> object:
+            nonlocal calls
+            calls += 1
+            assert sql == "PRAGMA journal_mode = WAL"
+            if calls == 1:
+                error = sqlite3.OperationalError("database is recovering")
+                error.sqlite_errorcode = sqlite3.SQLITE_BUSY_RECOVERY
+                raise error
+            return object()
+
+    async def record_sleep(delay: float) -> None:
+        sleep_delays.append(delay)
+
+    monkeypatch.setattr(asyncio, "sleep", record_sleep)
+
+    await _enable_wal(
+        BusyRecoveryThenSuccessfulConnection()  # type: ignore[arg-type]
+    )
 
     assert calls == 2
     assert sleep_delays == [0.01]
