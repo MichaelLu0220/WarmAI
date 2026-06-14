@@ -58,6 +58,20 @@ def test_recovered_breaker_permits_exactly_one_half_open_probe() -> None:
     assert not breaker.allow_request()
 
 
+def test_abandoned_half_open_probe_is_replaced_after_lease_expires() -> None:
+    now = [100.0]
+    breaker = CircuitBreaker(1, 30.0, clock=lambda: now[0])
+    breaker.record_failure()
+    now[0] = 130.0
+    assert breaker.allow_request()
+
+    now[0] = 159.999
+    assert not breaker.allow_request()
+    now[0] = 160.0
+    assert breaker.allow_request()
+    assert not breaker.allow_request()
+
+
 def test_successful_half_open_probe_closes_and_resets_breaker() -> None:
     now = [100.0]
     breaker = CircuitBreaker(3, 30.0, clock=lambda: now[0])
@@ -78,6 +92,18 @@ def test_successful_half_open_probe_closes_and_resets_breaker() -> None:
     assert_breaker_state(breaker, CircuitState.OPEN)
 
 
+def test_success_in_closed_state_resets_consecutive_failures() -> None:
+    breaker = CircuitBreaker(3, 30.0, clock=lambda: 100.0)
+    breaker.record_failure()
+    breaker.record_failure()
+
+    breaker.record_success()
+    breaker.record_failure()
+    breaker.record_failure()
+
+    assert_breaker_state(breaker, CircuitState.CLOSED)
+
+
 def test_failed_half_open_probe_reopens_and_restarts_recovery() -> None:
     now = [100.0]
     breaker = CircuitBreaker(1, 30.0, clock=lambda: now[0])
@@ -96,13 +122,51 @@ def test_failed_half_open_probe_reopens_and_restarts_recovery() -> None:
     assert_breaker_state(breaker, CircuitState.HALF_OPEN)
 
 
+@pytest.mark.parametrize("outcome", ["record_success", "record_failure"])
+def test_outcome_reported_while_open_is_rejected_without_changing_recovery(
+    outcome: str,
+) -> None:
+    now = [100.0]
+    breaker = CircuitBreaker(1, 30.0, clock=lambda: now[0])
+    breaker.record_failure()
+    now[0] = 110.0
+
+    with pytest.raises(RuntimeError, match="cannot record an outcome while circuit is open"):
+        getattr(breaker, outcome)()
+
+    assert_breaker_state(breaker, CircuitState.OPEN)
+    now[0] = 129.999
+    assert not breaker.allow_request()
+    now[0] = 130.0
+    assert breaker.allow_request()
+
+
+@pytest.mark.parametrize("outcome", ["record_success", "record_failure"])
+def test_half_open_outcome_requires_an_unexpired_admitted_probe(outcome: str) -> None:
+    now = [100.0]
+    breaker = CircuitBreaker(1, 30.0, clock=lambda: now[0])
+    breaker.record_failure()
+    now[0] = 130.0
+    assert breaker.allow_request()
+    now[0] = 160.0
+
+    with pytest.raises(RuntimeError, match="half-open probe is not active"):
+        getattr(breaker, outcome)()
+
+    assert_breaker_state(breaker, CircuitState.HALF_OPEN)
+    assert breaker.allow_request()
+
+
 @pytest.mark.parametrize(
     ("failure_threshold", "recovery_seconds", "message"),
     [
         (0, 30.0, "failure_threshold must be positive"),
         (-1, 30.0, "failure_threshold must be positive"),
-        (3, 0.0, "recovery_seconds must be positive"),
-        (3, -0.1, "recovery_seconds must be positive"),
+        (3, 0.0, "recovery_seconds must be finite and positive"),
+        (3, -0.1, "recovery_seconds must be finite and positive"),
+        (3, float("nan"), "recovery_seconds must be finite and positive"),
+        (3, float("inf"), "recovery_seconds must be finite and positive"),
+        (3, float("-inf"), "recovery_seconds must be finite and positive"),
     ],
 )
 def test_breaker_rejects_non_positive_configuration(
@@ -114,11 +178,31 @@ def test_breaker_rejects_non_positive_configuration(
         CircuitBreaker(failure_threshold, recovery_seconds)
 
 
-def test_adapter_contract_types_are_runtime_compatible_and_immutable() -> None:
-    adapter: InferenceAdapter = MockAdapter()
+@pytest.mark.parametrize(
+    ("attribute", "value"),
+    [
+        ("state", CircuitState.OPEN),
+        ("failure_threshold", 1),
+        ("recovery_seconds", 1.0),
+    ],
+)
+def test_breaker_public_configuration_and_state_are_read_only(
+    attribute: str,
+    value: object,
+) -> None:
+    breaker = CircuitBreaker(3, 30.0)
+
+    with pytest.raises(AttributeError):
+        setattr(breaker, attribute, value)
+
+    assert breaker.state is CircuitState.CLOSED
+    assert breaker.failure_threshold == 3
+    assert breaker.recovery_seconds == 30.0
+
+
+def test_adapter_response_is_immutable_and_availability_error_is_runtime_error() -> None:
     response = AdapterResponse(raw_text="{}", model_version="test-001")
 
-    assert isinstance(adapter, InferenceAdapter)
     assert issubclass(AdapterAvailabilityError, RuntimeError)
     with pytest.raises(FrozenInstanceError):
         response.raw_text = "changed"  # type: ignore[misc]
@@ -126,7 +210,8 @@ def test_adapter_contract_types_are_runtime_compatible_and_immutable() -> None:
 
 @pytest.mark.asyncio
 async def test_mock_adapter_consumes_queued_outputs_before_default() -> None:
-    adapter = MockAdapter(outputs=["first", "second"])
+    mock = MockAdapter(outputs=["first", "second"])
+    adapter: InferenceAdapter = mock
 
     responses = [
         await adapter.generate(prompt="one", json_schema={}, timeout_seconds=1.0),
@@ -140,9 +225,11 @@ async def test_mock_adapter_consumes_queued_outputs_before_default() -> None:
         DEFAULT_MOCK_OUTPUT,
     ]
     assert [response.model_version for response in responses] == ["mock-001"] * 3
-    assert adapter.calls == 3
+    assert mock.calls == 3
 
 
 @pytest.mark.asyncio
 async def test_mock_adapter_healthcheck_is_healthy() -> None:
-    assert await MockAdapter().healthcheck() is True
+    adapter: InferenceAdapter = MockAdapter()
+
+    assert await adapter.healthcheck() is True

@@ -30,7 +30,18 @@ def test_deadline_has_required_remaining_budget() -> None:
     assert not deadline.has(1.500001)
 
 
-@pytest.mark.parametrize("seconds", [0.0, -0.1])
-def test_deadline_rejects_non_positive_duration(seconds: float) -> None:
-    with pytest.raises(ValueError, match="seconds must be positive"):
+@pytest.mark.parametrize("seconds", [0.0, -0.1, float("nan"), float("inf"), float("-inf")])
+def test_deadline_rejects_invalid_duration(seconds: float) -> None:
+    with pytest.raises(ValueError, match="seconds must be finite and positive"):
         Deadline.after(seconds)
+
+
+@pytest.mark.parametrize(
+    "minimum_seconds",
+    [-0.1, float("nan"), float("inf"), float("-inf")],
+)
+def test_deadline_has_rejects_invalid_minimum(minimum_seconds: float) -> None:
+    deadline = Deadline.after(1.0, clock=lambda: 10.0)
+
+    with pytest.raises(ValueError, match="minimum_seconds must be finite and non-negative"):
+        deadline.has(minimum_seconds)

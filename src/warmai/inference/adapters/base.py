@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, Protocol, runtime_checkable
+from typing import Any, Protocol
 
 
 class AdapterAvailabilityError(RuntimeError):
@@ -12,7 +12,6 @@ class AdapterResponse:
     model_version: str
 
 
-@runtime_checkable
 class InferenceAdapter(Protocol):
     async def generate(
         self,

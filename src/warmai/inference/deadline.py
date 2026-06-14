@@ -1,3 +1,4 @@
+import math
 import time
 from collections.abc import Callable
 from dataclasses import dataclass
@@ -14,12 +15,14 @@ class Deadline:
         seconds: float,
         clock: Callable[[], float] = time.monotonic,
     ) -> "Deadline":
-        if seconds <= 0:
-            raise ValueError("seconds must be positive")
+        if not math.isfinite(seconds) or seconds <= 0:
+            raise ValueError("seconds must be finite and positive")
         return cls(clock() + seconds, clock)
 
     def remaining(self) -> float:
         return max(0.0, self.expires_at - self.clock())
 
     def has(self, minimum_seconds: float) -> bool:
+        if not math.isfinite(minimum_seconds) or minimum_seconds < 0:
+            raise ValueError("minimum_seconds must be finite and non-negative")
         return self.remaining() >= minimum_seconds
