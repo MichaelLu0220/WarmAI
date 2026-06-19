@@ -1,0 +1,5 @@
+{"case_id":"zh-001","text":"整理房間","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"en-001","text":"Clean the desk","expected_language":"en","expected_score":2,"correction_expected":false}
+{"case_id":"en-typo-001","text":"Clena the desk","expected_language":"en","expected_score":2,"correction_expected":true}
+{"case_id":"mixed-001","text":"更新 README 文件","expected_language":"mixed","expected_score":2,"correction_expected":false}
+{"case_id":"ambiguous-001","text":"完成專案","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
