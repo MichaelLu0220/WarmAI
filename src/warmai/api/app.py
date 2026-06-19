@@ -9,6 +9,7 @@ from warmai.api.routes.task_analysis import router
 from warmai.config.logging_config import configure_logging
 from warmai.config.settings import Settings, get_settings
 from warmai.inference.adapters.base import InferenceAdapter
+from warmai.inference.adapters.llama_cpp import LlamaCppAdapter
 from warmai.inference.adapters.mock import MockAdapter
 from warmai.inference.circuit_breaker import CircuitBreaker
 from warmai.inference.service import InferenceService
@@ -16,6 +17,15 @@ from warmai.persistence.database import Database
 from warmai.persistence.events import InferenceEventRepository
 from warmai.persistence.idempotency import IdempotencyService
 from warmai.persistence.migrations import run_migrations
+
+
+def build_adapter(settings: Settings) -> InferenceAdapter:
+    if settings.adapter_kind == "mock":
+        return MockAdapter()
+    return LlamaCppAdapter(
+        base_url=settings.llama_cpp_base_url,
+        model=settings.llama_cpp_model,
+    )
 
 
 def create_app(
@@ -41,7 +51,7 @@ def create_app(
         ttl_seconds=resolved.pii_idempotency_ttl_seconds,
     )
     app.state.inference = InferenceService(
-        adapter or MockAdapter(),
+        adapter or build_adapter(resolved),
         CircuitBreaker(
             resolved.circuit_failure_threshold,
             resolved.circuit_recovery_seconds,
