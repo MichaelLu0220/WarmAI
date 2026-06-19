@@ -41,9 +41,7 @@ def classify_language(text: str) -> LanguageResult:
 
     if han_count and latin_count:
         first_is_han = next(
-            _is_han(char)
-            for char in normalized
-            if _is_han(char) or _is_latin(char)
+            _is_han(char) for char in normalized if _is_han(char) or _is_latin(char)
         )
         primary = PrimaryLanguage.ZH_TW if first_is_han else PrimaryLanguage.EN
         return LanguageResult(Language.MIXED, primary)
