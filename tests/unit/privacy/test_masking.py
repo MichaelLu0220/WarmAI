@@ -14,14 +14,20 @@ def test_masks_email_phone_and_contextual_chinese_name() -> None:
         ("EMAIL", "user@example.com"),
         ("PHONE", "0912-345-678"),
     ]
-    assert (
-        masked
-        == "提醒[PERSON_001]寄信到 [EMAIL_001]\N{FULLWIDTH COMMA}電話 [PHONE_001]"
-    )
+    assert masked == "提醒[PERSON_001]寄信到 [EMAIL_001]\N{FULLWIDTH COMMA}電話 [PHONE_001]"
 
 
 def test_normal_task_is_training_eligible() -> None:
     assert detect_pii("整理房間") == []
+
+
+def test_detects_reminder_context_chinese_name() -> None:
+    text = "提醒王小明整理房間"
+
+    detections = detect_pii(text)
+
+    assert detections == [PiiSpan(start=2, end=5, kind="PERSON")]
+    assert mask_text(text, detections) == "提醒[PERSON_001]整理房間"
 
 
 @pytest.mark.parametrize(
@@ -200,7 +206,4 @@ def test_detects_and_masks_standalone_tw_id_and_ip() -> None:
         ("TW_ID", "A123456789"),
         ("IP", "192.168.1.1"),
     ]
-    assert (
-        mask_text(text, detections)
-        == "身分證 [TW_ID_001]\N{FULLWIDTH COMMA}IP [IP_001]"
-    )
+    assert mask_text(text, detections) == "身分證 [TW_ID_001]\N{FULLWIDTH COMMA}IP [IP_001]"

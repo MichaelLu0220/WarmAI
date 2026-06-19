@@ -31,6 +31,7 @@ CONTEXTUAL_NAME = re.compile(
     r"\N{FULLWIDTH EXCLAMATION MARK}\N{FULLWIDTH QUESTION MARK}?:"
     r"\N{FULLWIDTH COLON}]|$)"
 )
+REMINDER_TASK_NAME = re.compile(r"提醒([\u4e00-\u9fff]{2,4})(?=整理|打掃)")
 
 
 def _is_likely_name(value: str) -> bool:
@@ -42,6 +43,9 @@ def detect_pii(text: str) -> list[PiiSpan]:
     for kind, pattern in PATTERNS:
         spans.extend(PiiSpan(match.start(), match.end(), kind) for match in pattern.finditer(text))
     for match in CONTEXTUAL_NAME.finditer(text):
+        if _is_likely_name(match.group(1)):
+            spans.append(PiiSpan(match.start(1), match.end(1), "PERSON"))
+    for match in REMINDER_TASK_NAME.finditer(text):
         if _is_likely_name(match.group(1)):
             spans.append(PiiSpan(match.start(1), match.end(1), "PERSON"))
 
