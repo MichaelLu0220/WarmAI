@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from warmai.api.error_handlers import install_error_handlers
 from warmai.api.routes.task_analysis import router
@@ -43,6 +44,12 @@ def create_app(
         yield
 
     app = FastAPI(title="WarmAI", version="1.0", lifespan=lifespan)
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_methods=["POST", "OPTIONS"],
+        allow_headers=["Content-Type", "X-API-Key", "Idempotency-Key"],
+    )
     app.state.settings = resolved
     app.state.database = database
     app.state.events = InferenceEventRepository(database)
