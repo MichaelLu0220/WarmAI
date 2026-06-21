@@ -28,6 +28,7 @@ dev = [
 [project.scripts]
 warmai = "warmai.cli:main"
 warmai-evaluate = "warmai.evaluation.runner:main"
+warmai-evaluate-suite = "warmai.evaluation.suite:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/warmai"]

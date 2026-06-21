@@ -65,7 +65,40 @@ def test_summary_rates_and_p95_are_deterministic() -> None:
     assert summary.valid_json_rate == pytest.approx(2 / 3)
     assert summary.language_preservation_rate == pytest.approx(2 / 3)
     assert summary.fallback_rate == pytest.approx(2 / 3)
+    assert summary.http_contract_pass_rate == 1.0
     assert summary.p95_latency_ms == 50
+
+
+def test_http_contract_pass_rate_counts_only_http_cases() -> None:
+    summary = summarize(
+        [
+            EvaluationSample(
+                case_type="score",
+                expected_score=2,
+                actual_score=2,
+                valid_json=True,
+                latency_ms=10,
+            ),
+            EvaluationSample(
+                case_type="http",
+                expected_score=0,
+                actual_score=0,
+                valid_json=True,
+                latency_ms=20,
+                http_contract_passed=True,
+            ),
+            EvaluationSample(
+                case_type="http",
+                expected_score=0,
+                actual_score=0,
+                valid_json=True,
+                latency_ms=30,
+                http_contract_passed=False,
+            ),
+        ]
+    )
+
+    assert summary.http_contract_pass_rate == pytest.approx(0.5)
 
 
 def test_empty_evaluation_is_rejected() -> None:
