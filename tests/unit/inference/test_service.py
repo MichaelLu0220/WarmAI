@@ -225,8 +225,14 @@ def test_build_prompt_includes_version_language_task_and_retry_note() -> None:
         validation_error="score must be <= 5",
     )
 
-    assert f"Prompt version: {PROMPT_VERSION}" in prompt
+    assert PROMPT_VERSION == "task-analysis-002"
+    assert "Prompt version: task-analysis-002" in prompt
     assert "/no_think" in prompt
     assert "Give one reason in en" in prompt
+    assert "Score 1: trivial, one clear step, usually under 5 minutes." in prompt
+    assert "Score 3: normal chore or personal task with multiple steps" in prompt
+    assert "Score 4: substantial task needing planning" in prompt
+    assert "suggested_text must be null" in prompt
+    assert "Do not rewrite clear text just to make it prettier" in prompt
     assert "score must be <= 5" in prompt
     assert prompt.endswith("Task: Clean the room")
