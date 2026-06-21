@@ -32,23 +32,25 @@ uvicorn warmai.main:app --host 127.0.0.1 --port 8000
 warmai "整理房間" --api-key dev-secret
 ```
 
-## Run Qwen3-4B With llama.cpp
+## Run Qwen3-8B With local llama.cpp
 
-Build llama.cpp with CUDA by following:
-https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md
+The tested Windows setup keeps large local files out of Git:
 
-```bash
-llama-server \
-  -hf Qwen/Qwen3-4B-GGUF:Q4_K_M \
-  --alias warmai-base-001 \
-  --host 127.0.0.1 \
-  --port 8080 \
-  --jinja \
-  -ngl all \
-  -c 4096 \
-  -n 256 \
-  -fa on \
-  --parallel 1
+- Model: `models/qwen3-8b/Qwen3-8B-Q4_K_M.gguf`
+- llama.cpp: `tools/llama.cpp/b9735-cuda-12.4/`
+
+Start llama.cpp first:
+
+```powershell
+cd G:\Micp\WarmAI
+.\tools\llama.cpp\b9735-cuda-12.4\llama-server.exe `
+  --model .\models\qwen3-8b\Qwen3-8B-Q4_K_M.gguf `
+  --alias qwen3-8b-q4 `
+  --host 127.0.0.1 `
+  --port 8080 `
+  --ctx-size 4096 `
+  --n-gpu-layers all `
+  --jinja
 ```
 
 Update `.env`:
@@ -56,7 +58,14 @@ Update `.env`:
 ```dotenv
 WARMAI_ADAPTER_KIND=llama_cpp
 WARMAI_LLAMA_CPP_BASE_URL=http://127.0.0.1:8080
-WARMAI_LLAMA_CPP_MODEL=warmai-base-001
+WARMAI_LLAMA_CPP_MODEL=qwen3-8b-q4
+```
+
+Then start WarmAI:
+
+```powershell
+cd G:\Micp\WarmAI
+.\.venv\Scripts\python.exe -m uvicorn warmai.main:app --host 127.0.0.1 --port 8000
 ```
 
 ## Verify

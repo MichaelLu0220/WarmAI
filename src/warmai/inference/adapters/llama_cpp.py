@@ -41,7 +41,14 @@ class LlamaCppAdapter:
             "top_k": TOP_K,
             "presence_penalty": PRESENCE_PENALTY,
             "chat_template_kwargs": {"enable_thinking": False},
-            "response_format": {"type": "json_schema", "schema": json_schema},
+            "response_format": {
+                "type": "json_schema",
+                "json_schema": {
+                    "name": "warmai_task_analysis",
+                    "strict": True,
+                    "schema": json_schema,
+                },
+            },
         }
         try:
             response = await self.client.post(

@@ -32,6 +32,7 @@ Thumbs.db
 # WarmAI runtime
 data/
 models/
+tools/
 reports/latest.json
 reports/history/*.json
 reports/summary.md
