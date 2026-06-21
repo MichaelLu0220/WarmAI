@@ -23,9 +23,13 @@ def build_prompt(
         if validation_error
         else ""
     )
-    return _load_template(resolved_version).format(
-        prompt_version=resolved_version,
-        primary_language=primary_language.value,
-        retry_note=retry_note,
-        text=text,
-    ).rstrip("\n")
+    return (
+        _load_template(resolved_version)
+        .format(
+            prompt_version=resolved_version,
+            primary_language=primary_language.value,
+            retry_note=retry_note,
+            text=text,
+        )
+        .rstrip("\n")
+    )
