@@ -34,8 +34,12 @@ data/
 models/
 tools/
 reports/latest.json
+reports/latest_failures.jsonl
 reports/history/*.json
+reports/history/*-failures.jsonl
 reports/summary.md
+reports/failures.md
+reports/suite/
 !reports/history/.gitkeep
 .pytest_cache/
 .mypy_cache/
