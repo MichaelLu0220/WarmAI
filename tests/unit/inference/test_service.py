@@ -236,3 +236,24 @@ def test_build_prompt_includes_version_language_task_and_retry_note() -> None:
     assert "Do not rewrite clear text just to make it prettier" in prompt
     assert "score must be <= 5" in prompt
     assert prompt.endswith("Task: Clean the room")
+
+
+def test_build_prompt_can_load_prior_template_version() -> None:
+    prompt = build_prompt(
+        "Clean the room",
+        PrimaryLanguage.EN,
+        prompt_version="task-analysis-001",
+    )
+
+    assert "Prompt version: task-analysis-001" in prompt
+    assert "Only correct clear spelling, typo, or grammar errors." in prompt
+    assert "Score 1: trivial" not in prompt
+
+
+def test_build_prompt_rejects_unknown_template_version() -> None:
+    with pytest.raises(ValueError, match="Unknown prompt template version"):
+        build_prompt(
+            "Clean the room",
+            PrimaryLanguage.EN,
+            prompt_version="task-analysis-999",
+        )
