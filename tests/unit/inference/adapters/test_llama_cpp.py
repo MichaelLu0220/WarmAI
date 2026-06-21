@@ -54,7 +54,11 @@ async def test_adapter_requests_schema_constrained_non_thinking_json() -> None:
     assert captured["chat_template_kwargs"] == {"enable_thinking": False}
     assert captured["response_format"] == {
         "type": "json_schema",
-        "schema": {"type": "object"},
+        "json_schema": {
+            "name": "warmai_task_analysis",
+            "strict": True,
+            "schema": {"type": "object"},
+        },
     }
     await client.aclose()
 
