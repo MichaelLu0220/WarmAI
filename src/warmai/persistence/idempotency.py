@@ -65,6 +65,17 @@ class IdempotencyService:
                     await connection.rollback()
                 raise
 
+    async def release(self, key: str) -> None:
+        async with self.database.connect() as connection:
+            await connection.execute(
+                """
+                DELETE FROM idempotency_records
+                WHERE idempotency_key = ? AND status = 'in_progress'
+                """,
+                (key,),
+            )
+            await connection.commit()
+
     async def complete(self, key: str, response_json: str, pii_detected: bool) -> None:
         persisted = None if pii_detected else response_json
         if pii_detected:

@@ -13,6 +13,7 @@ from warmai.evaluation.runner import load_cases, passes_mvp_gates, run_cases
 class EvaluationDataset:
     name: str
     path: Path
+    http_contract_min: float = 1.0
 
 
 @dataclass(frozen=True)
@@ -26,7 +27,14 @@ class SuiteDatasetResult:
 
 DEFAULT_DATASETS = (
     EvaluationDataset("core", Path("evaluation/core.jsonl")),
+    # Deterministic, pre-model rejections (symbols / unsupported language) — these
+    # are caught by character rules before inference, so they must stay perfect.
     EvaluationDataset("hard_cases", Path("evaluation/hard_cases.jsonl")),
+    # Fuzzy task-intent gate cannot hit 100%, so these run under relaxed HTTP
+    # thresholds. Real tasks are held stricter than non-tasks because falsely
+    # rejecting a real task is the worse error.
+    EvaluationDataset("real_tasks", Path("evaluation/real_tasks.jsonl"), http_contract_min=0.95),
+    EvaluationDataset("non_task", Path("evaluation/non_task.jsonl"), http_contract_min=0.90),
 )
 
 
@@ -52,7 +60,7 @@ def run_suite(
                 name=dataset.name,
                 dataset=dataset.path,
                 summary=summary,
-                passed=passes_mvp_gates(summary),
+                passed=passes_mvp_gates(summary, http_contract_min=dataset.http_contract_min),
                 samples=samples,
             )
         )

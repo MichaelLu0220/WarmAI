@@ -12,6 +12,9 @@ docs/superpowers/
 __pycache__/
 *.py[cod]
 .venv/
+.codex-venv/
+.uv-cache/
+.tmp/
 venv/
 
 # Node.js
@@ -40,6 +43,7 @@ reports/history/*-failures.jsonl
 reports/summary.md
 reports/failures.md
 reports/suite/
+reports/experiments/
 !reports/history/.gitkeep
 .pytest_cache/
 .mypy_cache/

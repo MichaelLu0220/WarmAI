@@ -58,7 +58,10 @@ def test_run_suite_evaluates_datasets_in_order(monkeypatch: pytest.MonkeyPatch) 
         lambda cases, base_url, api_key: [_sample()],
     )
     monkeypatch.setattr("warmai.evaluation.suite.summarize", lambda samples: _summary())
-    monkeypatch.setattr("warmai.evaluation.suite.passes_mvp_gates", lambda summary: True)
+    monkeypatch.setattr(
+        "warmai.evaluation.suite.passes_mvp_gates",
+        lambda summary, **kwargs: True,
+    )
 
     results = run_suite("http://api", "secret", datasets=datasets)
 

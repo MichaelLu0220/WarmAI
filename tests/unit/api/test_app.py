@@ -34,6 +34,23 @@ def test_build_adapter_selects_llama_cpp() -> None:
     assert adapter.model == "model-1"
 
 
+def test_build_adapter_passes_inference_overrides() -> None:
+    settings = Settings(
+        api_key=SecretStr("secret"),
+        adapter_kind="llama_cpp",
+        llama_cpp_base_url="http://llama/",
+        llama_cpp_model="model-1",
+        llama_cpp_temperature=0.0,
+        llama_cpp_seed=7,
+    )
+
+    adapter = build_adapter(settings)
+
+    assert isinstance(adapter, LlamaCppAdapter)
+    assert adapter.temperature == 0.0
+    assert adapter.seed == 7
+
+
 def test_task_analysis_allows_browser_preflight(tmp_path: Path) -> None:
     app = create_app(_settings(tmp_path), adapter=MockAdapter())
 
