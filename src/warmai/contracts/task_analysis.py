@@ -34,6 +34,7 @@ class ModelOutput(StrictModel):
     score_confidence: Confidence
     warnings: Annotated[list[WarningText], Field(max_length=5)]
     reason: Annotated[StrictStr, Field(min_length=1, max_length=100)]
+    is_task: StrictBool
     needs_review: StrictBool
 
 

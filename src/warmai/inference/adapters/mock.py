@@ -23,7 +23,8 @@ class MockAdapter:
             else (
                 '{"suggested_text":null,"score":3,'
                 '"correction_confidence":0.9,"score_confidence":0.6,'
-                '"warnings":[],"reason":"Mock analysis.","needs_review":false}'
+                '"warnings":[],"reason":"Mock analysis.",'
+                '"is_task":true,"needs_review":false}'
             )
         )
         return AdapterResponse(raw_text=raw, model_version="mock-001")

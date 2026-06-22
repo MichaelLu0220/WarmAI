@@ -12,6 +12,7 @@ def test_model_output_accepts_contract_bounds() -> None:
         score_confidence=0.6,
         warnings=["資訊不足"],
         reason="通常需要多個步驟。",
+        is_task=True,
         needs_review=False,
     )
     assert output.score == 3
@@ -27,6 +28,7 @@ def test_model_output_rejects_out_of_range_scores(score: int) -> None:
             score_confidence=0.5,
             warnings=[],
             reason="Valid reason.",
+            is_task=True,
             needs_review=False,
         )
 

@@ -26,6 +26,8 @@ def build_adapter(settings: Settings) -> InferenceAdapter:
     return LlamaCppAdapter(
         base_url=settings.llama_cpp_base_url,
         model=settings.llama_cpp_model,
+        temperature=settings.llama_cpp_temperature,
+        seed=settings.llama_cpp_seed,
     )
 
 

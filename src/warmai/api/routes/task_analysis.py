@@ -136,6 +136,13 @@ async def analyze_task(
         primary_language=language.primary_language,
         deadline=Deadline.after(request.app.state.settings.internal_deadline_seconds),
     )
+    if not inference.output.is_task:
+        await request.app.state.idempotency.release(idempotency_key)
+        raise ApiProblem(
+            400,
+            ErrorCode.UNANALYZABLE_INPUT,
+            "Input is readable but is not an actionable task.",
+        )
     latency_ms = int((time.monotonic() - request.state.started_at) * 1000)
     response = TaskAnalysisResponse(
         request_id=str(request.state.request_id),

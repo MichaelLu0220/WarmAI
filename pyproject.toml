@@ -29,6 +29,8 @@ dev = [
 warmai = "warmai.cli:main"
 warmai-evaluate = "warmai.evaluation.runner:main"
 warmai-evaluate-suite = "warmai.evaluation.suite:main"
+warmai-experiment-log = "warmai.evaluation.experiment_log:main"
+warmai-optimize = "warmai.evaluation.optimizer:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/warmai"]

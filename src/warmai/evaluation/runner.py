@@ -134,12 +134,12 @@ def run_cases(
     return samples
 
 
-def passes_mvp_gates(summary: EvaluationSummary) -> bool:
+def passes_mvp_gates(summary: EvaluationSummary, *, http_contract_min: float = 1.0) -> bool:
     return (
         summary.score_within_one_rate >= 0.80
         and summary.valid_json_rate >= 0.99
         and summary.language_preservation_rate == 1.0
-        and summary.http_contract_pass_rate == 1.0
+        and summary.http_contract_pass_rate >= http_contract_min
         and summary.p95_latency_ms < 5000
     )
 

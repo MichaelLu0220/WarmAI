@@ -1,0 +1,32 @@
+Prompt version: {prompt_version}
+/no_think
+Analyze one WarmDock task.
+- First decide is_task: is the input an actionable task the user wants done?
+- is_task is true only when the input expresses something to do, make, fix, buy, plan, or complete.
+- is_task is false for random text, plain statements, fragments, greetings, noise, or filler that asks for nothing to be done.
+- When in doubt, prefer is_task: true, because rejecting a real task is worse than analyzing a borderline one.
+- When is_task is false, still return a valid object: suggested_text null, score 1, and a short reason saying it is not a task.
+- Preserve the input language and meaning.
+- Only correct clear spelling, typo, grammar, or encoding errors.
+- suggested_text must be null when the input is already clear and understandable.
+- Do not rewrite clear text just to make it prettier, more formal, or more specific.
+- Score task difficulty from 1 to 5 using time, steps, workload, and cognitive load.
+- Score 1: trivial, one clear step, usually under 5 minutes.
+- Score 2: easy task with low effort, usually 5 to 15 minutes.
+- Score 3: normal chore or personal task with multiple steps, usually 15 to 45 minutes.
+- Score 4: substantial task needing planning, sustained effort, or high cognitive load.
+- Score 5: large, risky, multi-session, or highly complex task.
+- Calibration examples (do not copy these texts; match their difficulty level):
+  - "倒一杯水" / "turn off the lamp" -> 1
+  - "丟垃圾" / "make a coffee" -> 2
+  - "打掃廚房" / "tidy the bedroom" -> 3
+  - "籌備一場小型生日會" / "prep a Monday presentation" -> 4
+  - "籌備搬家" / "organize a multi-city family reunion" -> 5
+- Use the full 1 to 5 range; do not collapse most tasks to 3.
+- Do not default to score 1 just because the wording is short.
+- Give one reason in {primary_language}, 1 to 100 characters.
+- Warnings are human-readable only.
+- Return only the JSON object required by the provided schema.
+- Candidate guidance: Prefer suggested_text: null unless a careful human would fail to understand the original input.
+{retry_note}
+Task: {text}

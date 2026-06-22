@@ -40,7 +40,8 @@ async def test_json_repair_response_is_ok() -> None:
             (
                 '{"suggested_text":null,"score":3,'
                 '"correction_confidence":0.9,"score_confidence":0.6,'
-                '"warnings":[],"reason":"Several steps.","needs_review":false,}'
+                '"warnings":[],"reason":"Several steps.",'
+                '"is_task":true,"needs_review":false,}'
             )
         ],
     )
@@ -116,7 +117,8 @@ class ConcurrencyAdapter:
             raw_text=(
                 '{"suggested_text":null,"score":3,'
                 '"correction_confidence":0.9,"score_confidence":0.6,'
-                '"warnings":[],"reason":"Several steps.","needs_review":false}'
+                '"warnings":[],"reason":"Several steps.",'
+                '"is_task":true,"needs_review":false}'
             ),
             model_version="concurrency-test",
         )
@@ -225,8 +227,7 @@ def test_build_prompt_includes_version_language_task_and_retry_note() -> None:
         validation_error="score must be <= 5",
     )
 
-    assert PROMPT_VERSION == "task-analysis-002"
-    assert "Prompt version: task-analysis-002" in prompt
+    assert f"Prompt version: {PROMPT_VERSION}" in prompt
     assert "/no_think" in prompt
     assert "Give one reason in en" in prompt
     assert "Score 1: trivial, one clear step, usually under 5 minutes." in prompt

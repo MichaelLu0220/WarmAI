@@ -15,6 +15,7 @@ FIELD_ORDER = [
     "score_confidence",
     "warnings",
     "reason",
+    "is_task",
     "needs_review",
 ]
 
@@ -48,6 +49,7 @@ def test_safe_default_is_localized_and_contract_valid(
         score_confidence=0.0,
         warnings=[warning],
         reason=reason,
+        is_task=True,
         needs_review=True,
     )
 
@@ -92,6 +94,7 @@ def test_returned_values_are_defensive_copies() -> None:
         "score",
         "correction_confidence",
         "score_confidence",
+        "is_task",
         "needs_review",
     ]
 
@@ -148,6 +151,7 @@ def test_recovers_each_valid_field_and_tracks_provenance_in_model_order() -> Non
         "warnings": ["Check the deadline."],
         "score": 4,
         "correction_confidence": 0.9,
+        "is_task": True,
         "needs_review": True,
     }
 
@@ -179,6 +183,7 @@ def test_invalid_and_missing_fields_use_defaults_without_affecting_valid_fields(
         score_confidence=defaults.score_confidence,
         warnings=["請確認期限"],
         reason=defaults.reason,
+        is_task=True,
         needs_review=True,
     )
     assert recovery.recovered_fields == [
@@ -190,6 +195,7 @@ def test_invalid_and_missing_fields_use_defaults_without_affecting_valid_fields(
         "score",
         "score_confidence",
         "reason",
+        "is_task",
         "needs_review",
     ]
 

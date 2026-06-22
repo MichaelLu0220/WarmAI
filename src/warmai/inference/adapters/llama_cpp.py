@@ -18,10 +18,14 @@ class LlamaCppAdapter:
         *,
         base_url: str,
         model: str,
+        temperature: float | None = None,
+        seed: int | None = None,
         client: httpx.AsyncClient | None = None,
     ) -> None:
         self.base_url = base_url.rstrip("/")
         self.model = model
+        self.temperature = TEMPERATURE if temperature is None else temperature
+        self.seed = seed
         self.client = client or httpx.AsyncClient()
 
     async def generate(
@@ -36,7 +40,7 @@ class LlamaCppAdapter:
             "messages": [{"role": "user", "content": prompt}],
             "stream": False,
             "max_tokens": MAX_OUTPUT_TOKENS,
-            "temperature": TEMPERATURE,
+            "temperature": self.temperature,
             "top_p": TOP_P,
             "top_k": TOP_K,
             "presence_penalty": PRESENCE_PENALTY,
@@ -50,6 +54,8 @@ class LlamaCppAdapter:
                 },
             },
         }
+        if self.seed is not None:
+            payload["seed"] = self.seed
         try:
             response = await self.client.post(
                 f"{self.base_url}/v1/chat/completions",

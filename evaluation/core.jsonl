@@ -1,5 +1,500 @@
-{"case_id":"zh-001","text":"整理房間","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
-{"case_id":"en-001","text":"Clean the desk","expected_language":"en","expected_score":2,"correction_expected":false}
-{"case_id":"en-typo-001","text":"Clena the desk","expected_language":"en","expected_score":2,"correction_expected":true}
-{"case_id":"mixed-001","text":"更新 README 文件","expected_language":"mixed","expected_score":2,"correction_expected":false}
-{"case_id":"ambiguous-001","text":"完成專案","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s5-100","text":"Build a household emergency response plan across disasters, medical needs, finances, communication, and roles","expected_language":"en","expected_score":5,"correction_expected":false}
+{"case_id":"core-s3-029","text":"分析家裡噪音來源，排出可先處理的三個改善點","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s3-024","text":"Break down tax document preparation into tasks I can finish tonight","expected_language":"en","expected_score":3,"correction_expected":false}
+{"case_id":"core-s2-087","text":"整理讀書桌上的線材","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s4-082","text":"安排 storage room cleanup，包含 zones、搬運、安全和 disposal","expected_language":"mixed","expected_score":4,"correction_expected":false}
+{"case_id":"core-s1-063","text":"Put away the calendar","expected_language":"en","expected_score":1,"correction_expected":false}
+{"case_id":"core-s2-094","text":"分類email 收件匣重點","expected_language":"mixed","expected_score":2,"correction_expected":false}
+{"case_id":"core-s4-071","text":"Organize household account security with password updates, backup, permissions, and emergency access","expected_language":"en","expected_score":4,"correction_expected":false}
+{"case_id":"core-s3-003","text":"拆解整理房間步驟，排出今晚兩小時順續","expected_language":"zh-TW","expected_score":3,"correction_expected":true}
+{"case_id":"core-s4-086","text":"安排短途旅行前置作業，包含訂票、住宿、預算、打包和取消風險","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s4-047","text":"Coordinate a short trip with tickets, lodging, budget, packing, and cancellation risks","expected_language":"en","expected_score":4,"correction_expected":false}
+{"case_id":"core-s4-038","text":"規劃房間改造流程，包含丈量、採買、施工順序和備案","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s1-043","text":"把衣服丟進洗衣籃","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s5-067","text":"建立個人任務管理方法論，涵蓋收集、分類、排序、執行、回顧和淘汰","expected_language":"zh-TW","expected_score":5,"correction_expected":false}
+{"case_id":"core-s5-097","text":"Plan a long-term digital minimalism strategy to reduce subscriptions, notifications, file clutter, and device upkeep","expected_language":"en","expected_score":5,"correction_expected":false}
+{"case_id":"core-s4-020","text":"Plan a room makeover with measurements, purchasing, work sequence, and backup options","expected_language":"en","expected_score":4,"correction_expected":false}
+{"case_id":"core-s4-008","text":"安排短途旅行前置作業，包含訂票、住宿、預萛和取消風險","expected_language":"zh-TW","expected_score":4,"correction_expected":true}
+{"case_id":"core-s5-089","text":"Plan a five-year housing and finance decision framework across renting, buying, moving, and career changes","expected_language":"en","expected_score":5,"correction_expected":false}
+{"case_id":"core-s2-096","text":"Check travel pouch items","expected_language":"en","expected_score":2,"correction_expected":false}
+{"case_id":"core-s5-011","text":"建立家庭緊急應變方案，涵蓋災害、醫療、財務、通訊和責任分工","expected_language":"zh-TW","expected_score":5,"correction_expected":false}
+{"case_id":"core-s5-033","text":"Design a long-term relocation decision framework for budget, commute, lifestyle, risk, and staged action","expected_language":"en","expected_score":5,"correction_expected":false}
+{"case_id":"core-s5-079","text":"規劃長期租屋品質改善策略，平衡預算、修繕、搬家可能性和談判方案","expected_language":"zh-TW","expected_score":5,"correction_expected":false}
+{"case_id":"core-s2-054","text":"List family reminders","expected_language":"en","expected_score":2,"correction_expected":false}
+{"case_id":"core-s2-060","text":"Summarize bills due next week","expected_language":"en","expected_score":2,"correction_expected":false}
+{"case_id":"core-s4-083","text":"規劃 annual home maintenance，包含 AC、filter、backup、budget 和 reminder","expected_language":"mixed","expected_score":4,"correction_expected":false}
+{"case_id":"core-s1-044","text":"Make a cup of tea","expected_language":"en","expected_score":1,"correction_expected":false}
+{"case_id":"core-s5-059","text":"Design a family decision process for purchases, travel, expenses, chores, and conflict escalation","expected_language":"en","expected_score":5,"correction_expected":false}
+{"case_id":"core-s1-027","text":"打開 shopping app","expected_language":"mixed","expected_score":1,"correction_expected":false}
+{"case_id":"core-s4-009","text":"Plan phone data migraton with backups, checks, and rollback risks","expected_language":"en","expected_score":4,"correction_expected":true}
+{"case_id":"core-s1-019","text":"Hang the jacket","expected_language":"en","expected_score":1,"correction_expected":false}
+{"case_id":"core-s5-080","text":"建立 Notion life OS，整合 tasks、budget、health、calendar 和 weekly review","expected_language":"mixed","expected_score":5,"correction_expected":false}
+{"case_id":"core-s4-031","text":"安排 phone migration plan，包含 backup、2FA、apps、photos 和 rollback","expected_language":"mixed","expected_score":4,"correction_expected":false}
+{"case_id":"core-s5-093","text":"建立家庭知識管理系統，涵蓋文件保存、帳號交接、備份策略與權限治理","expected_language":"zh-TW","expected_score":5,"correction_expected":false}
+{"case_id":"core-s1-024","text":"補充衛生紙","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s5-021","text":"設計 yearly life review template，連結 goals、budget、health、relationships 和 next actions","expected_language":"mixed","expected_score":5,"correction_expected":false}
+{"case_id":"core-s5-004","text":"Build a household knowledge managment system for documents and backups","expected_language":"en","expected_score":5,"correction_expected":true}
+{"case_id":"core-s3-064","text":"比較 Uber 和捷運辦事路線，選出時間最穩的方案","expected_language":"mixed","expected_score":3,"correction_expected":false}
+{"case_id":"core-s3-077","text":"分析 browser tabs，分類成待讀、待辦和可關閉","expected_language":"mixed","expected_score":3,"correction_expected":false}
+{"case_id":"core-s1-076","text":"洗杯子","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s2-049","text":"列出車上置物箱需要補的用品","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s5-052","text":"設計家庭共同決策流程，處理採買、旅行、支出、家務和衝突升級規則","expected_language":"zh-TW","expected_score":5,"correction_expected":false}
+{"case_id":"core-s2-030","text":"Review the papers on my desk","expected_language":"en","expected_score":2,"correction_expected":false}
+{"case_id":"core-s2-020","text":"整理credit card app 消費紀錄","expected_language":"mixed","expected_score":2,"correction_expected":false}
+{"case_id":"core-s1-021","text":"補牙膏","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s5-024","text":"規劃家庭照護長期流程，涵蓋日常分工、醫療紀錄、費用、溝通和備援人力","expected_language":"zh-TW","expected_score":5,"correction_expected":false}
+{"case_id":"core-s2-026","text":"檢查客廳需要整理的區域","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s3-054","text":"規劃 weekend meal prep，包含 shopping list 和保存方式","expected_language":"mixed","expected_score":3,"correction_expected":false}
+{"case_id":"core-s5-017","text":"規劃五年居住與財務選擇框架，平衡租屋、買房、搬遷和職涯變動","expected_language":"zh-TW","expected_score":5,"correction_expected":false}
+{"case_id":"core-s2-047","text":"分類床邊櫃裡的藥品","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s4-007","text":"設計家中大掃除計畫，分配區域、工具、時程與延誤風險險","expected_language":"zh-TW","expected_score":4,"correction_expected":true}
+{"case_id":"core-s4-003","text":"規劃 cloud bakcup workflow，包含 photos 和 documents","expected_language":"mixed","expected_score":4,"correction_expected":true}
+{"case_id":"core-s3-026","text":"Analyze water and coffee intake this week, then adjust tomorrow’s drink plan","expected_language":"en","expected_score":3,"correction_expected":false}
+{"case_id":"core-s5-019","text":"Plan a multi-year family travel and savings system balancing experience, budget, leave days, and surprise costs","expected_language":"en","expected_score":5,"correction_expected":false}
+{"case_id":"core-s4-029","text":"設計工作日晨間流程，協調早餐、通勤、運動和臨時事件","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s5-012","text":"Design a ten-year life risk map covering health, income, family duties, housing, and learning capacity","expected_language":"en","expected_score":5,"correction_expected":false}
+{"case_id":"core-s4-041","text":"Coordinate a family dinner with changing headcount, budget, reservation, menu, and transport","expected_language":"en","expected_score":4,"correction_expected":false}
+{"case_id":"core-s5-003","text":"建立 Notoin life OS，整合 tasks、budget 和 weekly review","expected_language":"mixed","expected_score":5,"correction_expected":true}
+{"case_id":"core-s1-033","text":"充手機","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s5-062","text":"設計 digital minimalism system，處理 subscriptions、notifications、files、apps 和維護成本","expected_language":"mixed","expected_score":5,"correction_expected":false}
+{"case_id":"core-s5-084","text":"建立 family operations system，整合 grocery、chores、bills、calendar 和衝突處理","expected_language":"mixed","expected_score":5,"correction_expected":false}
+{"case_id":"core-s1-013","text":"洗一個蘋果","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s2-016","text":"Verify trash sorting items","expected_language":"en","expected_score":2,"correction_expected":false}
+{"case_id":"core-s1-035","text":"把口罩收好","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s4-097","text":"設計 reduce delivery plan，包含 menu、shopping、meal prep 和 fallback","expected_language":"mixed","expected_score":4,"correction_expected":false}
+{"case_id":"core-s3-053","text":"分析最近睡眠紀錄，找出可能影響早起的習慣","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s5-046","text":"規劃 cloud document governance，包含 naming、access control、backup、archive 和 handoff","expected_language":"mixed","expected_score":5,"correction_expected":false}
+{"case_id":"core-s3-099","text":"Compare exercising outside and cleaning at home this weekend, then schedule both if possible","expected_language":"en","expected_score":3,"correction_expected":false}
+{"case_id":"core-s5-081","text":"規劃 annual learning plan，平衡 work、side project、rest、budget 和 milestone review","expected_language":"mixed","expected_score":5,"correction_expected":false}
+{"case_id":"core-s1-056","text":"洗便當盒","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s3-093","text":"拆解要整理的文件類型，決定保留、掃描或丟棄","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s4-045","text":"Plan the move-out process for a rental with inspection, repairs, deposit records, and handover time","expected_language":"en","expected_score":4,"correction_expected":false}
+{"case_id":"core-s4-022","text":"Design a weekly life review system for spending, sleep, chores, and next-week priorities","expected_language":"en","expected_score":4,"correction_expected":false}
+{"case_id":"core-s5-090","text":"設計 relocation strategy，評估 rent、commute、quality of life、moving cost 和風險","expected_language":"mixed","expected_score":5,"correction_expected":false}
+{"case_id":"core-s1-023","text":"整理 desk 抽屜","expected_language":"mixed","expected_score":1,"correction_expected":false}
+{"case_id":"core-s4-078","text":"Create a pet-care rotation with feeding, cleaning, vet backup, and reminders","expected_language":"en","expected_score":4,"correction_expected":false}
+{"case_id":"core-s2-052","text":"整理shopping app 購物車","expected_language":"mixed","expected_score":2,"correction_expected":false}
+{"case_id":"core-s1-017","text":"把發票放進盒子","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s3-080","text":"規劃家人共用行事曆的欄位與提醒規則","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s3-055","text":"Analyze mouth ulcer and fatigue notes to summarize possible lifestyle patterns","expected_language":"en","expected_score":3,"correction_expected":false}
+{"case_id":"core-s1-032","text":"更新 todo list","expected_language":"mixed","expected_score":1,"correction_expected":false}
+{"case_id":"core-s4-053","text":"規劃 home network 整理，包含 router、Wi-Fi 密碼、設備清單和備援","expected_language":"mixed","expected_score":4,"correction_expected":false}
+{"case_id":"core-s5-094","text":"建立 household emergency plan，涵蓋 medicine、power bank、documents、contacts 和角色分工","expected_language":"mixed","expected_score":5,"correction_expected":false}
+{"case_id":"core-s3-036","text":"比較兩種收納方式，決定衣櫃要怎麼重新分類","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s1-011","text":"把 USB 放進包包","expected_language":"mixed","expected_score":1,"correction_expected":false}
+{"case_id":"core-s4-018","text":"Plan a kitchen storage reset with categories, workflow, safety, and maintenance rules","expected_language":"en","expected_score":4,"correction_expected":false}
+{"case_id":"core-s3-025","text":"Compare taking the bus and riding a scooter for errands, then choose the safer plan","expected_language":"en","expected_score":3,"correction_expected":false}
+{"case_id":"core-s1-055","text":"Sweep the entryway","expected_language":"en","expected_score":1,"correction_expected":false}
+{"case_id":"core-s1-029","text":"把 notebook 放進包包","expected_language":"mixed","expected_score":1,"correction_expected":false}
+{"case_id":"core-s1-020","text":"把外套掛好","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s4-019","text":"Plan exam-week living logistics with study, sleep, meals, commute, and reserve time","expected_language":"en","expected_score":4,"correction_expected":false}
+{"case_id":"core-s3-092","text":"分析最近嘴破和疲勞紀錄，整理可能相關的生活習慣","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s3-096","text":"Plan a Sunday night routine for preparing Monday work items","expected_language":"en","expected_score":3,"correction_expected":false}
+{"case_id":"core-s5-086","text":"Design a three-year personal resilience plan for income shifts, relocation options, health risks, and learning investment","expected_language":"en","expected_score":5,"correction_expected":false}
+{"case_id":"core-s4-036","text":"Plan annual home maintenance for AC, water filters, computer backups, and budget allocation","expected_language":"en","expected_score":4,"correction_expected":false}
+{"case_id":"core-s4-014","text":"安排 bill payment workflow，包含 calendar reminders、bank transfer、receipt backup 和確認流程","expected_language":"mixed","expected_score":4,"correction_expected":false}
+{"case_id":"core-s3-037","text":"規劃三天份便當菜單，兼顧預算、保存和準備時間","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s4-004","text":"設計 Notoin life dashboard，追蹤 budget、睡眠和家務","expected_language":"mixed","expected_score":4,"correction_expected":true}
+{"case_id":"core-s1-079","text":"把資料夾收好","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s2-037","text":"Check this week’s receipts","expected_language":"en","expected_score":2,"correction_expected":false}
+{"case_id":"core-s3-095","text":"分析 subscription list，決定哪些服務下個月先暫停","expected_language":"mixed","expected_score":3,"correction_expected":false}
+{"case_id":"core-s3-090","text":"Compare two grocery routes and choose the one that saves time without missing items","expected_language":"en","expected_score":3,"correction_expected":false}
+{"case_id":"core-s1-049","text":"Turn off the lamp","expected_language":"en","expected_score":1,"correction_expected":false}
+{"case_id":"core-s1-070","text":"Change the tissue box","expected_language":"en","expected_score":1,"correction_expected":false}
+{"case_id":"core-s2-061","text":"列出衣櫃裡要捐出的衣服","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s2-098","text":"整理家裡缺的清潔用品","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s2-048","text":"Organize cables on my desk","expected_language":"en","expected_score":2,"correction_expected":false}
+{"case_id":"core-s3-012","text":"比較兩個採買路線，選擇省時又不漏買的路線","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s4-054","text":"Create shared-apartment chore rules with duties, shopping, costs, and conflict handling","expected_language":"en","expected_score":4,"correction_expected":false}
+{"case_id":"core-s5-074","text":"設計 sustainable self-care system，連結 sleep、meal、exercise、social life 和 work boundary","expected_language":"mixed","expected_score":5,"correction_expected":false}
+{"case_id":"core-s3-004","text":"分析上個月花費，找出三個可減少的向目","expected_language":"zh-TW","expected_score":3,"correction_expected":true}
+{"case_id":"core-s2-038","text":"簡單整理衣物送洗清單","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s1-010","text":"整理房件","expected_language":"zh-TW","expected_score":1,"correction_expected":true}
+{"case_id":"core-s4-092","text":"規劃大型家用品採買流程，包含需求確認、比價、運送和退換貨風險","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s2-077","text":"Organize today’s grocery list","expected_language":"en","expected_score":2,"correction_expected":false}
+{"case_id":"core-s3-070","text":"比較一次大掃除和每天小整理的可行性","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s1-030","text":"拍下停車位置","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s3-089","text":"Plan fields and reminder rules for a shared family calendar","expected_language":"en","expected_score":3,"correction_expected":false}
+{"case_id":"core-s1-025","text":"Charge my phone","expected_language":"en","expected_score":1,"correction_expected":false}
+{"case_id":"core-s2-088","text":"List supplies to restock in the toolbox","expected_language":"en","expected_score":2,"correction_expected":false}
+{"case_id":"core-s5-023","text":"Build a household knowledge management system for documents, account handoff, backups, and permissions","expected_language":"en","expected_score":5,"correction_expected":false}
+{"case_id":"core-s1-067","text":"把筆記本收好","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s5-031","text":"Plan a long-term family care workflow covering daily duties, medical records, costs, communication, and backup help","expected_language":"en","expected_score":5,"correction_expected":false}
+{"case_id":"core-s3-002","text":"Break down room cleanning into a two-hour plan","expected_language":"en","expected_score":3,"correction_expected":true}
+{"case_id":"core-s4-033","text":"規劃颱風前家庭準備，包含物資、窗戶、電力、通訊和撤離備案","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s1-050","text":"把購物袋收好","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s5-082","text":"Build a sustainable weekend operating system for sleep recovery, shopping, cleaning, social time, and rest","expected_language":"en","expected_score":5,"correction_expected":false}
+{"case_id":"core-s2-012","text":"確認抽屜裡的收據","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s5-027","text":"規劃家人協作照顧長輩的長期方案，包含排班、費用、溝通和突發狀況","expected_language":"zh-TW","expected_score":5,"correction_expected":false}
+{"case_id":"core-s5-016","text":"規劃未來一年技能學習與生活成本控制方案，避免目標太多導致崩盤","expected_language":"zh-TW","expected_score":5,"correction_expected":false}
+{"case_id":"core-s3-018","text":"規劃週末兩天家務分工，讓打掃和採買不互相卡住","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s5-001","text":"Design a long-term relocation decision framwork for budget and commute","expected_language":"en","expected_score":5,"correction_expected":true}
+{"case_id":"core-s2-080","text":"簡單整理陽台植物澆水紀錄","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s3-041","text":"分析通勤時間，找出早上可以節省十五分鐘的方法","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s2-051","text":"分類未讀訊息","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s1-081","text":"把 phone 靜音","expected_language":"mixed","expected_score":1,"correction_expected":false}
+{"case_id":"core-s4-079","text":"規劃家電汰換流程，包含預算、尺寸、安裝時間和舊機處理","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s4-075","text":"設計家用工具借用與歸還制度，包含標記、紀錄、責任和遺失處理","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s4-052","text":"Plan a large household purchase process with needs, price checks, delivery, and return risks","expected_language":"en","expected_score":4,"correction_expected":false}
+{"case_id":"core-s2-062","text":"List supplies to restock in the entryway","expected_language":"en","expected_score":2,"correction_expected":false}
+{"case_id":"core-s2-095","text":"Clean up packages received today","expected_language":"en","expected_score":2,"correction_expected":false}
+{"case_id":"core-s2-014","text":"摘要meal plan 清單","expected_language":"mixed","expected_score":2,"correction_expected":false}
+{"case_id":"core-s1-015","text":"把毛巾收好","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s4-096","text":"規劃 shared grocery system，包含 shopping list、budget、inventory 和例外處理","expected_language":"mixed","expected_score":4,"correction_expected":false}
+{"case_id":"core-s1-097","text":"確認 homework 有沒有完成","expected_language":"mixed","expected_score":1,"correction_expected":false}
+{"case_id":"core-s3-079","text":"分析家中電線混亂位置，規劃安全收納順序","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s3-083","text":"拆解 email inbox cleanup，先處理帳單、通知和重要信件","expected_language":"mixed","expected_score":3,"correction_expected":false}
+{"case_id":"core-s5-092","text":"Design a long-term household data security policy for passwords, backups, device retirement, and emergency access","expected_language":"en","expected_score":5,"correction_expected":false}
+{"case_id":"core-s3-078","text":"Compare doing all laundry at once versus splitting it across two days","expected_language":"en","expected_score":3,"correction_expected":false}
+{"case_id":"core-s5-008","text":"規劃一年生活作息重建方案，整合睡眠、運動、飲食、工作壓力和追綜","expected_language":"zh-TW","expected_score":5,"correction_expected":true}
+{"case_id":"core-s5-025","text":"Plan a six-month health habit transformation across hydration, sleep, exercise, meals, and checkup reminders","expected_language":"en","expected_score":5,"correction_expected":false}
+{"case_id":"core-s2-033","text":"Verify small tasks for tonight","expected_language":"en","expected_score":2,"correction_expected":false}
+{"case_id":"core-s5-078","text":"建立 personal resilience plan，涵蓋 income risk、health routine、skills、savings 和 backup options","expected_language":"mixed","expected_score":5,"correction_expected":false}
+{"case_id":"core-s3-021","text":"規劃 weekly reset routine，包含 laundry、採買和打掃","expected_language":"mixed","expected_score":3,"correction_expected":false}
+{"case_id":"core-s2-053","text":"List clothes to donate","expected_language":"en","expected_score":2,"correction_expected":false}
+{"case_id":"core-s2-084","text":"列出書房需要補的用品","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s4-055","text":"規劃搬家前兩週流程，包含打包、清潔、地址變更與備援時間","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s4-021","text":"設計 cloud backup workflow，包含 photos、documents、naming 和 recovery test","expected_language":"mixed","expected_score":4,"correction_expected":false}
+{"case_id":"core-s2-029","text":"確認近期要預約的事項","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s5-054","text":"設計未來半年家庭財務改善策略，包含預算制度、儲蓄目標、風險控管和每月檢討","expected_language":"zh-TW","expected_score":5,"correction_expected":false}
+{"case_id":"core-s3-011","text":"Plan a weekly study and rest rhythm so I stop staying up too late","expected_language":"en","expected_score":3,"correction_expected":false}
+{"case_id":"core-s1-054","text":"Buy milk","expected_language":"en","expected_score":1,"correction_expected":false}
+{"case_id":"core-s3-076","text":"比較 online banking 和 ATM 繳費的風險與方便性","expected_language":"mixed","expected_score":3,"correction_expected":false}
+{"case_id":"core-s4-064","text":"規劃新工作第一個月生活調整，包含通勤、作息、餐費和家務節奏","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s4-011","text":"規劃手機與電腦資料搬移，包含備份、驗證、清理和回復風險","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s5-015","text":"設計 long-term digital backup policy，包含 iCloud、external drive、permission 和 recovery drill","expected_language":"mixed","expected_score":5,"correction_expected":false}
+{"case_id":"core-s4-089","text":"安排家庭聚餐專案，處理人數變動、預算、訂位、菜單和交通","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s2-089","text":"Review breakfast ingredients for tomorrow","expected_language":"en","expected_score":2,"correction_expected":false}
+{"case_id":"core-s1-071","text":"Wipe the desk","expected_language":"en","expected_score":1,"correction_expected":false}
+{"case_id":"core-s2-083","text":"確認本週交通費","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s3-017","text":"Analyze why clutter keeps building up and design a ten-minute daily cleanup routine","expected_language":"en","expected_score":3,"correction_expected":false}
+{"case_id":"core-s1-083","text":"列印一張文件","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s5-053","text":"設計個人三年生活彈性策略，包含收入波動、搬遷選項、健康風險和學習投資","expected_language":"zh-TW","expected_score":5,"correction_expected":false}
+{"case_id":"core-s2-024","text":"分類常用密碼提示清單","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s3-034","text":"Compare phone photo backup options and decide what to back up first","expected_language":"en","expected_score":3,"correction_expected":false}
+{"case_id":"core-s5-006","text":"Plan a one-year routine reset across sleep, excercise, meals, and stress","expected_language":"en","expected_score":5,"correction_expected":true}
+{"case_id":"core-s1-012","text":"Put receipts in the box","expected_language":"en","expected_score":1,"correction_expected":false}
+{"case_id":"core-s5-040","text":"規劃半年健康習慣轉型方案，整合飲水、睡眠、運動、飲食和回診提醒","expected_language":"zh-TW","expected_score":5,"correction_expected":false}
+{"case_id":"core-s2-018","text":"整理今天的 todo list","expected_language":"mixed","expected_score":2,"correction_expected":false}
+{"case_id":"core-s3-061","text":"分析 credit card app 消費紀錄，找出可以少花的項目","expected_language":"mixed","expected_score":3,"correction_expected":false}
+{"case_id":"core-s2-050","text":"Clean up dinner prep steps","expected_language":"en","expected_score":2,"correction_expected":false}
+{"case_id":"core-s3-056","text":"拆解整理房間的步驟，排出今天晚上兩小時的順序","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s1-003","text":"Wipe the tabel","expected_language":"en","expected_score":1,"correction_expected":true}
+{"case_id":"core-s3-019","text":"Analyze fridge ingredients and plan meals to avoid wasting food","expected_language":"en","expected_score":3,"correction_expected":false}
+{"case_id":"core-s2-004","text":"摘要這週花廢","expected_language":"zh-TW","expected_score":2,"correction_expected":true}
+{"case_id":"core-s3-049","text":"分析本週飲水與咖啡紀錄，調整明天的飲品安排","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s5-018","text":"Plan a year-long learning and life balance strategy with goals, resources, and review cycles","expected_language":"en","expected_score":5,"correction_expected":false}
+{"case_id":"core-s5-029","text":"Design a six-month household finance strategy with budgeting, savings, risk controls, and monthly reviews","expected_language":"en","expected_score":5,"correction_expected":false}
+{"case_id":"core-s1-026","text":"換桌上的面紙盒","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s1-080","text":"把 laptop 充電","expected_language":"mixed","expected_score":1,"correction_expected":false}
+{"case_id":"core-s3-043","text":"Analyze last month’s spending and pick three expenses to reduce","expected_language":"en","expected_score":3,"correction_expected":false}
+{"case_id":"core-s1-041","text":"檢查 LINE 訊息","expected_language":"mixed","expected_score":1,"correction_expected":false}
+{"case_id":"core-s3-063","text":"Plan three days of meal prep with budget, storage, and cooking time in mind","expected_language":"en","expected_score":3,"correction_expected":false}
+{"case_id":"core-s3-039","text":"Analyze my commute and find ways to save fifteen minutes in the morning","expected_language":"en","expected_score":3,"correction_expected":false}
+{"case_id":"core-s3-006","text":"規劃 Notoin household dashboard 的分類","expected_language":"mixed","expected_score":3,"correction_expected":true}
+{"case_id":"core-s2-002","text":"Summarize this week’s reciepts","expected_language":"en","expected_score":2,"correction_expected":true}
+{"case_id":"core-s3-005","text":"分析 credit card app 消廢紀錄","expected_language":"mixed","expected_score":3,"correction_expected":true}
+{"case_id":"core-s3-016","text":"分析雜物堆積原因，設計一個每天十分鐘的整理流程","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s1-089","text":"把門鎖好","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s3-023","text":"拆解準備短途旅行的步驟，安排打包、訂票和預算","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s3-045","text":"規劃小房間重新佈置，先決定動線、收納和預算","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s4-024","text":"Prepare a long-holiday home checklist for utilities, doors, pets, trash, and emergency contacts","expected_language":"en","expected_score":4,"correction_expected":false}
+{"case_id":"core-s3-082","text":"比較線上繳費和超商繳費流程，選最不容易忘記的方法","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s1-086","text":"Put away the keyboard","expected_language":"en","expected_score":1,"correction_expected":false}
+{"case_id":"core-s1-040","text":"擦餐桌","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s3-009","text":"Analyze last month’s speding and pick three cuts","expected_language":"en","expected_score":3,"correction_expected":true}
+{"case_id":"core-s2-046","text":"列出廚房需要補的用品","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s3-069","text":"比較 Google Calendar 和紙本手帳，決定下週行程管理方式","expected_language":"mixed","expected_score":3,"correction_expected":false}
+{"case_id":"core-s4-037","text":"設計個人財務月結流程，包含帳戶核對、支出分類、預算修正和備份","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s5-030","text":"Build an annual household operating rhythm across finance, chores, health, travel, and quarterly reviews","expected_language":"en","expected_score":5,"correction_expected":false}
+{"case_id":"core-s1-075","text":"打開 download folder","expected_language":"mixed","expected_score":1,"correction_expected":false}
+{"case_id":"core-s3-075","text":"規劃一週讀書與休息節奏，避免每天都拖到半夜","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s4-057","text":"安排 moving-out photo record，包含 checklist、file naming、cloud backup 和交屋對照","expected_language":"mixed","expected_score":4,"correction_expected":false}
+{"case_id":"core-s2-032","text":"Clean up today’s spending","expected_language":"en","expected_score":2,"correction_expected":false}
+{"case_id":"core-s4-080","text":"規劃三個月還款與生活費分配，包含固定支出、緊急預備金和檢查點","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s4-012","text":"Coordinate year-end decluttering across documents, clothing, bills, photos, and donations","expected_language":"en","expected_score":4,"correction_expected":false}
+{"case_id":"core-s3-071","text":"分析冰箱食材，安排三餐順序以避免浪費","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s4-050","text":"設計家人共用採買制度，避免重複購買、漏買和預算失控","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s5-036","text":"規劃 family care workflow，包含 schedule、medical notes、cost sharing、chat group 和 emergency plan","expected_language":"mixed","expected_score":5,"correction_expected":false}
+{"case_id":"core-s4-098","text":"Design a one-month routine improvement plan for sleep, meals, exercise, and tracking metrics","expected_language":"en","expected_score":4,"correction_expected":false}
+{"case_id":"core-s1-006","text":"Chek email","expected_language":"en","expected_score":1,"correction_expected":true}
+{"case_id":"core-s2-069","text":"核對家裡 Wi-Fi 帳號密碼備份","expected_language":"mixed","expected_score":2,"correction_expected":false}
+{"case_id":"core-s4-091","text":"安排家庭帳號安全整理，包含密碼更新、備份、權限和緊急聯絡","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s3-038","text":"比較 iCloud 和 external drive 備份照片的先後順序","expected_language":"mixed","expected_score":3,"correction_expected":false}
+{"case_id":"core-s4-032","text":"安排寵物照顧輪班表，包含餵食、清潔、就醫備案和提醒機制","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s2-028","text":"Review spice inventory","expected_language":"en","expected_score":2,"correction_expected":false}
+{"case_id":"core-s4-030","text":"規劃 closet reset project，包含 sorting、donation、storage boxes 和維持規則","expected_language":"mixed","expected_score":4,"correction_expected":false}
+{"case_id":"core-s5-034","text":"Build a multi-device data governance strategy with backup tiers, sync rules, privacy, and recovery drills","expected_language":"en","expected_score":5,"correction_expected":false}
+{"case_id":"core-s4-058","text":"設計兩週晚餐採買與備料流程，降低浪費並保留彈性","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s5-076","text":"Build an annual life review system connecting finance, health, relationships, learning, and work rhythm","expected_language":"en","expected_score":5,"correction_expected":false}
+{"case_id":"core-s5-071","text":"設計家用資料安全長期政策，包含密碼、備份、設備淘汰和緊急存取","expected_language":"zh-TW","expected_score":5,"correction_expected":false}
+{"case_id":"core-s5-044","text":"Plan a staged one-year living-quality improvement strategy with budget, repairs, storage, and moving evaluation","expected_language":"en","expected_score":5,"correction_expected":false}
+{"case_id":"core-s4-087","text":"Plan an appliance replacement with budget, measurements, installation, and old-unit disposal","expected_language":"en","expected_score":4,"correction_expected":false}
+{"case_id":"core-s5-048","text":"建立 weekend operating system，平衡 chores、meal prep、social time、recovery 和下週準備","expected_language":"mixed","expected_score":5,"correction_expected":false}
+{"case_id":"core-s5-042","text":"規劃長期數位極簡策略，降低訂閱、通知、檔案混亂和設備維護成本","expected_language":"zh-TW","expected_score":5,"correction_expected":false}
+{"case_id":"core-s2-011","text":"Review screenshots in my phone album","expected_language":"en","expected_score":2,"correction_expected":false}
+{"case_id":"core-s4-027","text":"設計家中文件數位化流程，包含分類、掃描、備份、命名和權限","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s1-094","text":"擦眼鏡","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s5-035","text":"設計三個月 stress management program，整合 metrics、triggers、intervention 和 review cycle","expected_language":"mixed","expected_score":5,"correction_expected":false}
+{"case_id":"core-s2-079","text":"簡單整理今天收到的包裹","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s3-042","text":"Plan a one-week breakfast rotation that is cheap and easy to prepare","expected_language":"en","expected_score":3,"correction_expected":false}
+{"case_id":"core-s4-015","text":"規劃家中小型修繕清單，排序成本、急迫性、工具和可用時間","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s4-035","text":"設計三週減少外送計畫，包含菜單、採買、備料和失敗備案","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s1-005","text":"Clena my mug","expected_language":"en","expected_score":1,"correction_expected":true}
+{"case_id":"core-s2-067","text":"列出洗衣前的衣物顏色","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s3-031","text":"比較 Dropbox 和 Google Drive 備份家庭文件的流程","expected_language":"mixed","expected_score":3,"correction_expected":false}
+{"case_id":"core-s1-038","text":"打開 calendar","expected_language":"mixed","expected_score":1,"correction_expected":false}
+{"case_id":"core-s3-020","text":"Compare two closet storage methods and decide how to reorganize clothes","expected_language":"en","expected_score":3,"correction_expected":false}
+{"case_id":"core-s4-060","text":"設計家中大掃除計畫，分配區域、工具、時程與可能延誤風險","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s4-074","text":"Design a two-week dinner shopping and prep system that reduces waste but stays flexible","expected_language":"en","expected_score":4,"correction_expected":false}
+{"case_id":"core-s2-009","text":"整理 Notoin 裡的待辦","expected_language":"mixed","expected_score":2,"correction_expected":true}
+{"case_id":"core-s3-058","text":"分析 phone screen time，找出睡前最該減少的 app","expected_language":"mixed","expected_score":3,"correction_expected":false}
+{"case_id":"core-s1-009","text":"倒垃及","expected_language":"zh-TW","expected_score":1,"correction_expected":true}
+{"case_id":"core-s3-007","text":"比較外食和自己煮晚餐的成夲，再決定本週安排","expected_language":"zh-TW","expected_score":3,"correction_expected":true}
+{"case_id":"core-s1-061","text":"把 charger 收進抽屜","expected_language":"mixed","expected_score":1,"correction_expected":false}
+{"case_id":"core-s2-013","text":"摘要家裡備用電池數量","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s2-022","text":"確認旅行用的小物清單","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s2-070","text":"確認這週的發票","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s2-066","text":"Summarize what is left in the fridge","expected_language":"en","expected_score":2,"correction_expected":false}
+{"case_id":"core-s1-004","text":"澆陽台植栽栽","expected_language":"zh-TW","expected_score":1,"correction_expected":true}
+{"case_id":"core-s2-074","text":"Sort items to pack for tomorrow","expected_language":"en","expected_score":2,"correction_expected":false}
+{"case_id":"core-s1-037","text":"回覆一封 email","expected_language":"mixed","expected_score":1,"correction_expected":false}
+{"case_id":"core-s4-034","text":"設計一個月健康作息改善計畫，包含睡眠、飲食、運動和追蹤指標","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s2-044","text":"核對今晚要完成的小事","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s2-017","text":"Organize clutter on the dining table","expected_language":"en","expected_score":2,"correction_expected":false}
+{"case_id":"core-s5-099","text":"規劃一年內改善居住品質的分階段策略，包含預算、修繕、收納與搬家評估","expected_language":"zh-TW","expected_score":5,"correction_expected":false}
+{"case_id":"core-s1-069","text":"倒垃圾","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s2-008","text":"Check tomorow’s appointments","expected_language":"en","expected_score":2,"correction_expected":true}
+{"case_id":"core-s2-003","text":"確認 email 有沒有漏回","expected_language":"mixed","expected_score":2,"correction_expected":true}
+{"case_id":"core-s3-022","text":"Analyze my sleep notes and identify habits that make waking up harder","expected_language":"en","expected_score":3,"correction_expected":false}
+{"case_id":"core-s2-057","text":"檢查桌面 download folder","expected_language":"mixed","expected_score":2,"correction_expected":false}
+{"case_id":"core-s4-039","text":"Coordinate a family storage-room cleanup with zones, carrying tasks, safety, and disposal","expected_language":"en","expected_score":4,"correction_expected":false}
+{"case_id":"core-s1-088","text":"Check the mailbox","expected_language":"en","expected_score":1,"correction_expected":false}
+{"case_id":"core-s4-072","text":"Plan a home leak response with photos, contacts, temporary protection, and repair tracking","expected_language":"en","expected_score":4,"correction_expected":false}
+{"case_id":"core-s1-093","text":"Put away the wallet","expected_language":"en","expected_score":1,"correction_expected":false}
+{"case_id":"core-s1-064","text":"拿衣服去曬","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s4-085","text":"安排 family trip plan，包含 booking、budget、packing 和取消風險","expected_language":"mixed","expected_score":4,"correction_expected":false}
+{"case_id":"core-s4-016","text":"設計 subscription cleanup plan，包含 spreadsheet、取消日期、替代方案和提醒","expected_language":"mixed","expected_score":4,"correction_expected":false}
+{"case_id":"core-s5-058","text":"設計六個月 home budget strategy，包含 savings、risk control、monthly review 和家人溝通","expected_language":"mixed","expected_score":5,"correction_expected":false}
+{"case_id":"core-s4-099","text":"設計 Notion life dashboard，追蹤 budget、睡眠、家務和每週檢查","expected_language":"mixed","expected_score":4,"correction_expected":false}
+{"case_id":"core-s2-093","text":"整理今天要買的雜貨清單","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s5-069","text":"建立家庭飲食系統，涵蓋菜單輪替、採買節奏、營養平衡、預算和浪費控管","expected_language":"zh-TW","expected_score":5,"correction_expected":false}
+{"case_id":"core-s1-095","text":"檢查 Wi-Fi 是否開著","expected_language":"mixed","expected_score":1,"correction_expected":false}
+{"case_id":"core-s1-046","text":"整理鞋櫃一層","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s5-098","text":"設計家庭帳務透明制度，包含記帳規則、共用支出、查核方式和爭議處理","expected_language":"zh-TW","expected_score":5,"correction_expected":false}
+{"case_id":"core-s1-052","text":"把鍵盤收好","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s3-097","text":"Analyze delivery orders this month and decide how to cut next week’s cost","expected_language":"en","expected_score":3,"correction_expected":false}
+{"case_id":"core-s4-090","text":"安排朋友來住三天的準備，包含睡眠空間、餐食、交通和備案","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s1-068","text":"Fold one shirt","expected_language":"en","expected_score":1,"correction_expected":false}
+{"case_id":"core-s4-059","text":"規劃季節換衣流程，包含清洗、收納、防潮、淘汰和捐贈","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s3-052","text":"拆解 trip packing checklist，分成衣物、文件和充電器","expected_language":"mixed","expected_score":3,"correction_expected":false}
+{"case_id":"core-s3-010","text":"規劃週末家務份工，避免打掃和採買互卡","expected_language":"zh-TW","expected_score":3,"correction_expected":true}
+{"case_id":"core-s5-007","text":"設計未來半年家庭財務改善策略，包含預算制度、儲蓄目標、風險控管和每月檢討討","expected_language":"zh-TW","expected_score":5,"correction_expected":true}
+{"case_id":"core-s5-075","text":"Design a sustainable self-care system connecting sleep, meals, social life, exercise, and work boundaries","expected_language":"en","expected_score":5,"correction_expected":false}
+{"case_id":"core-s1-045","text":"Put laundry in the basket","expected_language":"en","expected_score":1,"correction_expected":false}
+{"case_id":"core-s2-027","text":"確認Notion 裡的生活待辦","expected_language":"mixed","expected_score":2,"correction_expected":false}
+{"case_id":"core-s5-063","text":"建立 shared finance dashboard，包含 bank records、receipts、categories、review 和權限","expected_language":"mixed","expected_score":5,"correction_expected":false}
+{"case_id":"core-s1-090","text":"關客廳窗戶","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s1-016","text":"把抱枕收好","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s4-081","text":"設計 weekend reset routine，整合 meal prep、cleaning、calendar 和 rest time","expected_language":"mixed","expected_score":4,"correction_expected":false}
+{"case_id":"core-s5-010","text":"規劃 personal finance roadmp，涵蓋 debt 和 emergency fund","expected_language":"mixed","expected_score":5,"correction_expected":true}
+{"case_id":"core-s5-056","text":"Design an energy and utility cost reduction strategy with behavior changes, device upgrades, and tracking","expected_language":"en","expected_score":5,"correction_expected":false}
+{"case_id":"core-s5-020","text":"設計家庭年度大整理制度，結合文件、物品、照片、數位資料和責任分工","expected_language":"zh-TW","expected_score":5,"correction_expected":false}
+{"case_id":"core-s1-099","text":"煮一顆水煮蛋","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s4-002","text":"規劃租屋退租流程，包含檢查清單、修繕、押金文建和交屋時間","expected_language":"zh-TW","expected_score":4,"correction_expected":true}
+{"case_id":"core-s3-084","text":"規劃 home workout schedule，避免和家務時間衝突","expected_language":"mixed","expected_score":3,"correction_expected":false}
+{"case_id":"core-s1-066","text":"Refill the water bottle","expected_language":"en","expected_score":1,"correction_expected":false}
+{"case_id":"core-s3-015","text":"分析家裡常缺的用品，建立下次採買優先順序","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s1-039","text":"把鬧鐘設成七點","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s5-047","text":"Plan a one-year routine reset across sleep, exercise, meals, work stress, and tracking","expected_language":"en","expected_score":5,"correction_expected":false}
+{"case_id":"core-s5-014","text":"建立長期個人資產整理制度，包含帳戶、文件、保險、負債和交接流程","expected_language":"zh-TW","expected_score":5,"correction_expected":false}
+{"case_id":"core-s5-064","text":"設計長期搬家決策框架，評估預算、通勤、生活品質、風險和分階段行動","expected_language":"zh-TW","expected_score":5,"correction_expected":false}
+{"case_id":"core-s4-070","text":"規劃租屋退租流程，包含檢查清單、修繕、押金文件和交屋時間","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s1-018","text":"Put the book back","expected_language":"en","expected_score":1,"correction_expected":false}
+{"case_id":"core-s5-060","text":"建立從混亂生活到穩定作息的九十天轉型計畫，包含里程碑和失敗處理","expected_language":"zh-TW","expected_score":5,"correction_expected":false}
+{"case_id":"core-s1-078","text":"打開 desktop","expected_language":"mixed","expected_score":1,"correction_expected":false}
+{"case_id":"core-s4-093","text":"Plan a two-week moving checklist with packing, cleaning, address changes, and buffer time","expected_language":"en","expected_score":4,"correction_expected":false}
+{"case_id":"core-s4-076","text":"Plan a balcony plant-care system with watering, sunlight, repotting, pest checks, and logs","expected_language":"en","expected_score":4,"correction_expected":false}
+{"case_id":"core-s4-073","text":"設計每週生活復盤制度，追蹤花費、睡眠、家務和下週重點","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s3-001","text":"Plan weekend choirs so cleaning and shopping do not conflict","expected_language":"en","expected_score":3,"correction_expected":true}
+{"case_id":"core-s2-025","text":"列出家人交代的事項","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s3-051","text":"Plan a small home medicine kit with categories and restock reminders","expected_language":"en","expected_score":3,"correction_expected":false}
+{"case_id":"core-s4-013","text":"Plan phone and computer data migration with backups, checks, cleanup, and rollback risks","expected_language":"en","expected_score":4,"correction_expected":false}
+{"case_id":"core-s3-050","text":"比較早睡和晚起對隔天安排的影響","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s4-040","text":"規劃廚房收納重整，包含分類、動線、安全和長期維持方式","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s2-001","text":"Sort laundy before washing","expected_language":"en","expected_score":2,"correction_expected":true}
+{"case_id":"core-s4-001","text":"Plan a two-week moving cheklist with packing and address changes","expected_language":"en","expected_score":4,"correction_expected":true}
+{"case_id":"core-s3-035","text":"規劃家裡小型藥箱，分類常用藥、耗材和補貨提醒","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s3-047","text":"比較搭車和騎車去辦事的時間成本，選一個比較穩的方案","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s5-051","text":"建立可持續的週末生活營運系統，整合補眠、採買、打掃、社交和休息","expected_language":"zh-TW","expected_score":5,"correction_expected":false}
+{"case_id":"core-s3-094","text":"Plan a small room layout change with flow, storage, and budget","expected_language":"en","expected_score":3,"correction_expected":false}
+{"case_id":"core-s2-015","text":"Check appointments I need to book","expected_language":"en","expected_score":2,"correction_expected":false}
+{"case_id":"core-s4-049","text":"Prepare for a friend staying three days with sleeping space, meals, transport, and backup plans","expected_language":"en","expected_score":4,"correction_expected":false}
+{"case_id":"core-s2-082","text":"簡單整理今天花掉的錢","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s4-044","text":"Plan a three-month debt and living expense schedule with fixed costs and emergency savings","expected_language":"en","expected_score":4,"correction_expected":false}
+{"case_id":"core-s2-036","text":"列出化妝台需要補的用品","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s3-086","text":"比較週末去運動或在家整理的利弊，排出可執行時段","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s5-037","text":"Design an annual family decluttering system across documents, objects, photos, digital files, and ownership","expected_language":"en","expected_score":5,"correction_expected":false}
+{"case_id":"core-s1-059","text":"把書放回書架","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s3-048","text":"比較 podcast time 和 reading time，安排通勤學習計畫","expected_language":"mixed","expected_score":3,"correction_expected":false}
+{"case_id":"core-s4-094","text":"Design a household shopping system to prevent duplicate purchases and missed items","expected_language":"en","expected_score":4,"correction_expected":false}
+{"case_id":"core-s3-072","text":"Plan a birthday dinner with guest count, location, and budget","expected_language":"en","expected_score":3,"correction_expected":false}
+{"case_id":"core-s4-026","text":"規劃家中年度保養時程，包含冷氣、濾水器、電腦備份和預算分配","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s5-002","text":"Design a six-month household finance stratgey with budgeting and savings","expected_language":"en","expected_score":5,"correction_expected":true}
+{"case_id":"core-s5-028","text":"Plan a long-term elder-care collaboration system with schedules, costs, communication, and emergency handling","expected_language":"en","expected_score":5,"correction_expected":false}
+{"case_id":"core-s1-092","text":"澆陽台植物","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s1-007","text":"Buy banannas","expected_language":"en","expected_score":1,"correction_expected":true}
+{"case_id":"core-s5-070","text":"規劃跨年度個人學習與生活平衡策略，包含目標拆解、資源配置和回顧機制","expected_language":"zh-TW","expected_score":5,"correction_expected":false}
+{"case_id":"core-s2-063","text":"列出calendar reminder 清單","expected_language":"mixed","expected_score":2,"correction_expected":false}
+{"case_id":"core-s2-091","text":"整理晚餐菜單想法","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s2-072","text":"摘要下週要繳的帳單","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s5-013","text":"規劃長期居家收納制度，結合採購規則、淘汰週期、家庭共識和維護流程","expected_language":"zh-TW","expected_score":5,"correction_expected":false}
+{"case_id":"core-s1-058","text":"Take vitamins","expected_language":"en","expected_score":1,"correction_expected":false}
+{"case_id":"core-s4-077","text":"安排多人合租家務規則，包含分工、採買、費用與衝突處理","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s4-100","text":"安排 LINE family calendar 流程，包含事件格式、提醒規則和責任人","expected_language":"mixed","expected_score":4,"correction_expected":false}
+{"case_id":"core-s5-087","text":"設計可持續的自我照顧系統，連結睡眠、飲食、社交、運動和工作邊界","expected_language":"zh-TW","expected_score":5,"correction_expected":false}
+{"case_id":"core-s1-085","text":"清掉桌上的杯子","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s1-047","text":"把雨傘拿出來晾乾","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s2-097","text":"核對下次採買優先順序","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s1-028","text":"把餐具收好","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s2-065","text":"摘要冰箱剩下的食材","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s2-071","text":"分類明天出門要帶的東西","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s1-074","text":"把鑰匙放進包包","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s5-088","text":"Design a long-term personal stress resilience system with warning signs, recovery routines, and support","expected_language":"en","expected_score":5,"correction_expected":false}
+{"case_id":"core-s3-059","text":"分析最近外送次數，決定下週如何降低花費","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s2-023","text":"List laundry colors before washing","expected_language":"en","expected_score":2,"correction_expected":false}
+{"case_id":"core-s5-032","text":"建立個人年度復盤系統，連結財務、健康、關係、學習與工作節奏","expected_language":"zh-TW","expected_score":5,"correction_expected":false}
+{"case_id":"core-s3-014","text":"Analyze messy cable areas at home and plan a safer organizing order","expected_language":"en","expected_score":3,"correction_expected":false}
+{"case_id":"core-s1-073","text":"Pick up the package","expected_language":"en","expected_score":1,"correction_expected":false}
+{"case_id":"core-s4-046","text":"規劃 home office setup，包含 desk layout、cables、lighting 和採買依賴","expected_language":"mixed","expected_score":4,"correction_expected":false}
+{"case_id":"core-s1-062","text":"去超市買牛奶","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s5-009","text":"建立家庭知識管理系統，涵蓋文件保存、帳號交接、備份策略與權限治裡","expected_language":"zh-TW","expected_score":5,"correction_expected":true}
+{"case_id":"core-s3-087","text":"比較不同時間洗衣的噪音和晾乾風險","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s3-040","text":"Compare eating out and cooking dinner, then choose a plan for this week","expected_language":"en","expected_score":3,"correction_expected":false}
+{"case_id":"core-s1-096","text":"把便條貼到螢幕旁","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s2-006","text":"Organize today’s grocey list","expected_language":"en","expected_score":2,"correction_expected":true}
+{"case_id":"core-s5-026","text":"Build a ninety-day transition plan from chaotic routines to stable daily systems with milestones and failure handling","expected_language":"en","expected_score":5,"correction_expected":false}
+{"case_id":"core-s5-096","text":"Design a six-month cost-saving lifestyle system with spending caps, alternatives, incentives, and reviews","expected_language":"en","expected_score":5,"correction_expected":false}
+{"case_id":"core-s3-085","text":"Compare one deep-clean day with small daily cleaning sessions","expected_language":"en","expected_score":3,"correction_expected":false}
+{"case_id":"core-s3-032","text":"Break down moving furniture in my room and list where I need help","expected_language":"en","expected_score":3,"correction_expected":false}
+{"case_id":"core-s3-066","text":"Break down documents into keep, scan, and discard categories","expected_language":"en","expected_score":3,"correction_expected":false}
+{"case_id":"core-s4-010","text":"Coordinate a short trip with tickets, lodging, buget, and packing","expected_language":"en","expected_score":4,"correction_expected":true}
+{"case_id":"core-s5-095","text":"建立個人年度財務作戰計畫，包含債務、保險、儲蓄、現金流和風險預案","expected_language":"zh-TW","expected_score":5,"correction_expected":false}
+{"case_id":"core-s2-055","text":"整理餐桌上的雜物","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s2-081","text":"分類今天的購物收據","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s4-042","text":"規劃考試週生活安排，包含讀書、睡眠、飲食、通勤和備用時間","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s1-036","text":"Wash one mug","expected_language":"en","expected_score":1,"correction_expected":false}
+{"case_id":"core-s5-073","text":"建立家庭年度營運節奏，整合財務、家務、健康、旅行和季度檢討","expected_language":"zh-TW","expected_score":5,"correction_expected":false}
+{"case_id":"core-s3-091","text":"Analyze household supplies that run out often and rank what to buy first","expected_language":"en","expected_score":3,"correction_expected":false}
+{"case_id":"core-s4-043","text":"規劃 household purchase workflow，包含 needs、price check、delivery 和 return risk","expected_language":"mixed","expected_score":4,"correction_expected":false}
+{"case_id":"core-s1-048","text":"把遙控器收好","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s2-073","text":"簡單整理cloud drive 家庭資料夾","expected_language":"mixed","expected_score":2,"correction_expected":false}
+{"case_id":"core-s5-050","text":"規劃 multi-year travel savings system，平衡 budget、leave days、family schedule 和 surprise cost","expected_language":"mixed","expected_score":5,"correction_expected":false}
+{"case_id":"core-s2-058","text":"檢查手機相簿裡的截圖","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s3-067","text":"規劃每晚關機前的五分鐘收尾流程","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s2-064","text":"整理週末家務清單","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s5-022","text":"設計 long-term stress resilience system，包含 warning signs、recovery routine 和 support network","expected_language":"mixed","expected_score":5,"correction_expected":false}
+{"case_id":"core-s1-072","text":"Put away the headphones","expected_language":"en","expected_score":1,"correction_expected":false}
+{"case_id":"core-s2-099","text":"摘要Google Calendar 明天行程","expected_language":"mixed","expected_score":2,"correction_expected":false}
+{"case_id":"core-s3-033","text":"規劃 Notion household dashboard 的分類和更新流程","expected_language":"mixed","expected_score":3,"correction_expected":false}
+{"case_id":"core-s2-068","text":"核對冰箱裡快過期的食物","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s4-084","text":"設計 weekly planning ritual，結合 todo app、calendar、budget 和家務分工","expected_language":"mixed","expected_score":4,"correction_expected":false}
+{"case_id":"core-s2-059","text":"List supplies to restock in the desk drawer","expected_language":"en","expected_score":2,"correction_expected":false}
+{"case_id":"core-s3-062","text":"拆解 room cleaning checklist，安排今晚先做的三個區塊","expected_language":"mixed","expected_score":3,"correction_expected":false}
+{"case_id":"core-s5-057","text":"Plan a long-term rental quality improvement strategy balancing budget, repairs, moving options, and negotiation","expected_language":"en","expected_score":5,"correction_expected":false}
+{"case_id":"core-s5-055","text":"建立家庭專案管理方式，讓旅行、修繕、採買和帳務都有負責人與檢查點","expected_language":"zh-TW","expected_score":5,"correction_expected":false}
+{"case_id":"core-s5-072","text":"建立 annual household operating rhythm，整合 finance、chores、health、travel 和 quarterly review","expected_language":"mixed","expected_score":5,"correction_expected":false}
+{"case_id":"core-s2-021","text":"Organize cleaning supplies we are missing","expected_language":"en","expected_score":2,"correction_expected":false}
+{"case_id":"core-s5-091","text":"設計三個月壓力管理與生活節奏改善系統，包含指標、干預方法和調整週期","expected_language":"zh-TW","expected_score":5,"correction_expected":false}
+{"case_id":"core-s1-022","text":"買香蕉","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s1-001","text":"Charge my phne","expected_language":"en","expected_score":1,"correction_expected":true}
+{"case_id":"core-s3-098","text":"比較手機相簿雲端備份方案，決定先備份哪些資料","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s2-075","text":"List supplies to restock in the car trunk","expected_language":"en","expected_score":2,"correction_expected":false}
+{"case_id":"core-s4-023","text":"安排年末整理流程，包含文件、衣物、帳單、照片和捐贈處理","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s5-005","text":"設計長期搬家決策框架，評估預算、通勤、生活品質、風險和分階段行動動","expected_language":"zh-TW","expected_score":5,"correction_expected":true}
+{"case_id":"core-s2-005","text":"分類書桌上的文建","expected_language":"zh-TW","expected_score":2,"correction_expected":true}
+{"case_id":"core-s5-045","text":"規劃 long-term meal system，整合 menu rotation、shopping list、nutrition、budget 和 waste control","expected_language":"mixed","expected_score":5,"correction_expected":false}
+{"case_id":"core-s4-051","text":"Plan typhoon preparation for supplies, windows, power, communication, and evacuation backup","expected_language":"en","expected_score":4,"correction_expected":false}
+{"case_id":"core-s4-063","text":"Plan a shared household budget adjustment with categories, communication, and tracking","expected_language":"en","expected_score":4,"correction_expected":false}
+{"case_id":"core-s4-006","text":"Design a full-home cleaning plan with zones, tools, and delay riks","expected_language":"en","expected_score":4,"correction_expected":true}
+{"case_id":"core-s3-068","text":"分析 todo app 裡拖延最久的任務，整理共同原因","expected_language":"mixed","expected_score":3,"correction_expected":false}
+{"case_id":"core-s3-008","text":"Compare eating out and cooking diner for this week","expected_language":"en","expected_score":3,"correction_expected":true}
+{"case_id":"core-s1-082","text":"Set an alarm for 7 AM","expected_language":"en","expected_score":1,"correction_expected":false}
+{"case_id":"core-s1-002","text":"買牛耐","expected_language":"zh-TW","expected_score":1,"correction_expected":true}
+{"case_id":"core-s2-043","text":"列出冰箱冷凍層需要補的用品","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s2-019","text":"確認laundry schedule","expected_language":"mixed","expected_score":2,"correction_expected":false}
+{"case_id":"core-s2-045","text":"Sort medicine in the bedside drawer","expected_language":"en","expected_score":2,"correction_expected":false}
+{"case_id":"core-s5-043","text":"Build a household project management system with owners and checkpoints for travel, repairs, shopping, and bills","expected_language":"en","expected_score":5,"correction_expected":false}
+{"case_id":"core-s1-034","text":"換垃圾袋","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s1-060","text":"把充電線收好","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s1-098","text":"設定 Pomodoro 25 分鐘","expected_language":"mixed","expected_score":1,"correction_expected":false}
+{"case_id":"core-s5-066","text":"設計家中能源與水電費降低策略，包含行為改變、設備汰換和成效追蹤","expected_language":"zh-TW","expected_score":5,"correction_expected":false}
+{"case_id":"core-s4-048","text":"Design a monthly personal finance closing process with reconciliation, categories, budget updates, and backup","expected_language":"en","expected_score":4,"correction_expected":false}
+{"case_id":"core-s2-056","text":"List supplies to restock in the bathroom","expected_language":"en","expected_score":2,"correction_expected":false}
+{"case_id":"core-s3-088","text":"拆解報稅資料準備流程，列出今晚能先完成的部分","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s1-091","text":"Check email","expected_language":"en","expected_score":1,"correction_expected":false}
+{"case_id":"core-s3-074","text":"規劃整理雲端硬碟的資料夾結構和命名方式","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s3-044","text":"規劃 LINE 群組聚餐投票，包含日期、預算和地點","expected_language":"mixed","expected_score":3,"correction_expected":false}
+{"case_id":"core-s4-005","text":"規劃搬家前兩週流程，包含打包、清潔、地址變更與備源時間","expected_language":"zh-TW","expected_score":4,"correction_expected":true}
+{"case_id":"core-s1-057","text":"把水壺裝滿","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s1-065","text":"Put away the mouse","expected_language":"en","expected_score":1,"correction_expected":false}
+{"case_id":"core-s4-065","text":"安排 roommate chore system，包含 laundry、trash、shopping 和費用分攤","expected_language":"mixed","expected_score":4,"correction_expected":false}
+{"case_id":"core-s3-060","text":"比較不同買菜頻率對食材浪費的影響","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s3-057","text":"比較外食和自己煮晚餐的成本，再決定本週晚餐安排","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s3-028","text":"Plan weekend chores so cleaning and grocery shopping do not overlap badly","expected_language":"en","expected_score":3,"correction_expected":false}
+{"case_id":"core-s3-100","text":"拆解搬房間家具的步驟，安排先後順序與需要幫忙的地方","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s4-068","text":"規劃 moving checklist，包含 packing、清潔、地址變更和 buffer time","expected_language":"mixed","expected_score":4,"correction_expected":false}
+{"case_id":"core-s4-017","text":"Design a document digitization workflow with sorting, scanning, backup, naming, and access control","expected_language":"en","expected_score":4,"correction_expected":false}
+{"case_id":"core-s4-069","text":"Design a household tool borrowing system with labels, records, responsibility, and loss handling","expected_language":"en","expected_score":4,"correction_expected":false}
+{"case_id":"core-s2-035","text":"列出浴室需要補的用品","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s2-034","text":"檢查廚房調味料存量","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s4-066","text":"設計 emergency kit plan，包含 power bank、medicine、water、documents 和更新週期","expected_language":"mixed","expected_score":4,"correction_expected":false}
+{"case_id":"core-s2-007","text":"整理今天要買的青單","expected_language":"zh-TW","expected_score":2,"correction_expected":true}
+{"case_id":"core-s4-067","text":"安排家庭成員共同整理倉庫，包含分區、搬運、安全和廢棄物處理","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s1-077","text":"把水杯收好","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s1-014","text":"Take out the trash","expected_language":"en","expected_score":1,"correction_expected":false}
+{"case_id":"core-s5-077","text":"建立 home improvement roadmap，整合 repair backlog、budget、DIY、vendor 和搬家評估","expected_language":"mixed","expected_score":5,"correction_expected":false}
+{"case_id":"core-s1-051","text":"Pack an umbrella","expected_language":"en","expected_score":1,"correction_expected":false}
+{"case_id":"core-s5-061","text":"Build a household meal system covering menu rotation, shopping rhythm, nutrition, budget, and waste control","expected_language":"en","expected_score":5,"correction_expected":false}
+{"case_id":"core-s1-100","text":"Delete one old photo","expected_language":"en","expected_score":1,"correction_expected":false}
+{"case_id":"core-s3-065","text":"Compare online bill payment and convenience store payment for reliability","expected_language":"en","expected_score":3,"correction_expected":false}
+{"case_id":"core-s5-083","text":"規劃一年生活作息重建方案，整合睡眠、運動、飲食、工作壓力和持續追蹤","expected_language":"zh-TW","expected_score":5,"correction_expected":false}
+{"case_id":"core-s2-031","text":"列出待洗衣物類型","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s2-100","text":"列出玄關需要補的用品","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s2-078","text":"Check receipts in the drawer","expected_language":"en","expected_score":2,"correction_expected":false}
+{"case_id":"core-s3-030","text":"Break down cleaning my room into a two-hour evening plan","expected_language":"en","expected_score":3,"correction_expected":false}
+{"case_id":"core-s4-062","text":"規劃陽台植物照護系統，包含澆水、日照、換盆、病蟲害和紀錄","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s5-068","text":"設計十年生活風險地圖，涵蓋健康、收入、家庭責任、居住和學習能力","expected_language":"zh-TW","expected_score":5,"correction_expected":false}
+{"case_id":"core-s1-031","text":"Close the window","expected_language":"en","expected_score":1,"correction_expected":false}
+{"case_id":"core-s5-049","text":"設計個人長期壓力韌性系統，包含預警指標、恢復流程和支援網絡","expected_language":"zh-TW","expected_score":5,"correction_expected":false}
+{"case_id":"core-s1-053","text":"把耳機收好","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s2-090","text":"檢查LINE 裡未回訊息","expected_language":"mixed","expected_score":2,"correction_expected":false}
+{"case_id":"core-s4-088","text":"Design a three-week plan to reduce food delivery with menus, shopping, prep, and fallback options","expected_language":"en","expected_score":4,"correction_expected":false}
+{"case_id":"core-s1-084","text":"Lock the door","expected_language":"en","expected_score":1,"correction_expected":false}
+{"case_id":"core-s4-028","text":"規劃 monthly budget review，包含 bank app、receipt、category 和下月調整","expected_language":"mixed","expected_score":4,"correction_expected":false}
+{"case_id":"core-s3-046","text":"Plan how to clean up my photo library before backing it up","expected_language":"en","expected_score":3,"correction_expected":false}
+{"case_id":"core-s2-076","text":"列出工具箱需要補的用品","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s2-039","text":"列出要帶去公司的物品","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s4-025","text":"設計 digital declutter project，包含 desktop、downloads、cloud drive 和備份驗證","expected_language":"mixed","expected_score":4,"correction_expected":false}
+{"case_id":"core-s4-095","text":"規劃家庭共用預算調整，包含支出分類、溝通方式和追蹤節奏","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s3-013","text":"規劃生日聚餐準備事項，包含人數、地點和預算","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s3-081","text":"Compare laundry times by noise level and drying risk","expected_language":"en","expected_score":3,"correction_expected":false}
+{"case_id":"core-s2-042","text":"分類home budget 小項目","expected_language":"mixed","expected_score":2,"correction_expected":false}
+{"case_id":"core-s5-039","text":"Create an annual personal finance plan covering debt, insurance, savings, cash flow, and risk scenarios","expected_language":"en","expected_score":5,"correction_expected":false}
+{"case_id":"core-s3-073","text":"規劃月底前整理相簿的流程，先挑重複照片再備份","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s2-085","text":"簡單整理月底 subscription 清單","expected_language":"mixed","expected_score":2,"correction_expected":false}
+{"case_id":"core-s3-027","text":"比較一次洗完衣服和分批洗的時間安排","expected_language":"zh-TW","expected_score":3,"correction_expected":false}
+{"case_id":"core-s2-040","text":"Sort unread messages","expected_language":"en","expected_score":2,"correction_expected":false}
+{"case_id":"core-s1-008","text":"把鑰匙放進包包裡裡","expected_language":"zh-TW","expected_score":1,"correction_expected":true}
+{"case_id":"core-s2-041","text":"摘要這週運動紀錄","expected_language":"zh-TW","expected_score":2,"correction_expected":false}
+{"case_id":"core-s5-085","text":"Plan a one-year skill learning and cost-control strategy that avoids taking on too many goals","expected_language":"en","expected_score":5,"correction_expected":false}
+{"case_id":"core-s2-092","text":"List supplies to restock in the closet","expected_language":"en","expected_score":2,"correction_expected":false}
+{"case_id":"core-s2-010","text":"確認冰箱還有哪寫食材","expected_language":"zh-TW","expected_score":2,"correction_expected":true}
+{"case_id":"core-s1-042","text":"開 Google Calendar","expected_language":"mixed","expected_score":1,"correction_expected":false}
+{"case_id":"core-s5-038","text":"Plan a sustainable home storage system with buying rules, discard cycles, family agreement, and maintenance","expected_language":"en","expected_score":5,"correction_expected":false}
+{"case_id":"core-s4-056","text":"安排長假前居家檢查流程，包含水電、門窗、寵物、垃圾和聯絡人","expected_language":"zh-TW","expected_score":4,"correction_expected":false}
+{"case_id":"core-s5-041","text":"Build a personal task management methodology for capture, sorting, prioritization, execution, review, and deletion","expected_language":"en","expected_score":5,"correction_expected":false}
+{"case_id":"core-s1-087","text":"把藥盒放進背包","expected_language":"zh-TW","expected_score":1,"correction_expected":false}
+{"case_id":"core-s5-065","text":"設計家庭 project management workflow，包含 owners、deadline、checklist、risk 和 retrospective","expected_language":"mixed","expected_score":5,"correction_expected":false}
+{"case_id":"core-s4-061","text":"Design a full-home cleaning plan with zones, tools, timeline, and delay risks","expected_language":"en","expected_score":4,"correction_expected":false}
+{"case_id":"core-s2-086","text":"核對PDF 發票檔案","expected_language":"mixed","expected_score":2,"correction_expected":false}

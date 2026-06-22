@@ -18,6 +18,11 @@ class Settings(BaseSettings):
     adapter_kind: Literal["mock", "llama_cpp"] = "mock"
     llama_cpp_base_url: str = "http://127.0.0.1:8080"
     llama_cpp_model: str = "warmai-base-001"
+    # Optional inference overrides. Default None -> use model_config values.
+    # Set WARMAI_LLAMA_CPP_TEMPERATURE=0 (and a seed) on an evaluation-only server
+    # to make suite runs reproducible without changing production sampling.
+    llama_cpp_temperature: float | None = Field(default=None, ge=0.0, le=2.0)
+    llama_cpp_seed: int | None = None
     internal_deadline_seconds: float = Field(default=4.5, gt=0, le=4.5)
     pii_idempotency_ttl_seconds: int = Field(default=300, ge=1)
     circuit_failure_threshold: int = Field(default=3, ge=1)

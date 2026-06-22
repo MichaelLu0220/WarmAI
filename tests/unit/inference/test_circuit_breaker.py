@@ -14,7 +14,8 @@ from warmai.inference.circuit_breaker import AdmissionPermit, CircuitBreaker, Ci
 DEFAULT_MOCK_OUTPUT = (
     '{"suggested_text":null,"score":3,'
     '"correction_confidence":0.9,"score_confidence":0.6,'
-    '"warnings":[],"reason":"Mock analysis.","needs_review":false}'
+    '"warnings":[],"reason":"Mock analysis.",'
+    '"is_task":true,"needs_review":false}'
 )
 
 

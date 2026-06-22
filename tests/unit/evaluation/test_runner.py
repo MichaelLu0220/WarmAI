@@ -196,6 +196,20 @@ def test_mvp_gates() -> None:
         p95_latency_ms=100,
     )
 
+    intent = EvaluationSummary(
+        total=1,
+        score_within_one_rate=1.0,
+        valid_json_rate=1.0,
+        language_preservation_rate=1.0,
+        fallback_rate=0.0,
+        unnecessary_correction_rate=0.0,
+        http_contract_pass_rate=0.92,
+        p95_latency_ms=100,
+    )
+
     assert passes_mvp_gates(passing) is True
     assert passes_mvp_gates(failing) is False
     assert passes_mvp_gates(http_failing) is False
+    # Relaxed intent gate: 0.92 fails the strict default but passes a 0.90 floor.
+    assert passes_mvp_gates(intent) is False
+    assert passes_mvp_gates(intent, http_contract_min=0.90) is True

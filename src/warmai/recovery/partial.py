@@ -69,6 +69,7 @@ def safe_default(language: PrimaryLanguage) -> ModelOutput:
         score_confidence=0.0,
         warnings=[warning],
         reason=reason,
+        is_task=True,
         needs_review=True,
     )
 
@@ -120,6 +121,6 @@ def _has_exact_contract_type(field_name: FieldName, value: object) -> bool:
         return type(value) is list and all(type(item) is str for item in value)
     if field_name == "reason":
         return type(value) is str
-    if field_name == "needs_review":
+    if field_name in {"is_task", "needs_review"}:
         return type(value) is bool
     return False

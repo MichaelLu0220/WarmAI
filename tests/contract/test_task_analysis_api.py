@@ -54,6 +54,58 @@ def test_rejects_unanalyzable_input_without_calling_model(tmp_path: Path) -> Non
     assert adapter.calls == 0
 
 
+def test_rejects_readable_non_task_input(tmp_path: Path) -> None:
+    adapter = MockAdapter(
+        outputs=[
+            (
+                '{"suggested_text":null,"score":1,'
+                '"correction_confidence":0.0,"score_confidence":0.0,'
+                '"warnings":[],"reason":"Not a task.",'
+                '"is_task":false,"needs_review":false}'
+            )
+        ],
+    )
+    app = create_app(_settings(tmp_path), adapter=adapter)
+
+    with TestClient(app) as client:
+        response = client.post(
+            "/v1/task-analysis",
+            headers={"X-API-Key": "secret", "Idempotency-Key": "key-non-task"},
+            json={
+                "text": "This is a random sentence.",
+                "client_request_id": "123e4567-e89b-12d3-a456-426614174000",
+            },
+        )
+
+    assert response.status_code == 400
+    assert response.json()["error"]["code"] == "UNANALYZABLE_INPUT"
+    assert adapter.calls == 1
+
+
+def test_non_task_rejection_releases_idempotency_key(tmp_path: Path) -> None:
+    non_task = (
+        '{"suggested_text":null,"score":1,'
+        '"correction_confidence":0.0,"score_confidence":0.0,'
+        '"warnings":[],"reason":"Not a task.",'
+        '"is_task":false,"needs_review":false}'
+    )
+    adapter = MockAdapter(outputs=[non_task, non_task])
+    app = create_app(_settings(tmp_path), adapter=adapter)
+    headers = {"X-API-Key": "secret", "Idempotency-Key": "key-retry"}
+    payload = {
+        "text": "This is a random sentence.",
+        "client_request_id": "123e4567-e89b-12d3-a456-426614174000",
+    }
+
+    with TestClient(app) as client:
+        first = client.post("/v1/task-analysis", headers=headers, json=payload)
+        retry = client.post("/v1/task-analysis", headers=headers, json=payload)
+
+    assert first.status_code == 400
+    assert retry.status_code == 400
+    assert adapter.calls == 2
+
+
 def test_rejects_over_200_characters_as_invalid_input(tmp_path: Path) -> None:
     adapter = MockAdapter()
     app = create_app(
